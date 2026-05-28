@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Hintergrund -->
+  <rect width="512" height="512" rx="115" fill="#059669"/>
+  <!-- Grüner Glanz oben -->
+  <ellipse cx="256" cy="160" rx="220" ry="120" fill="rgba(52,211,153,0.18)"/>
+  <!-- FB Text -->
+  <text x="256" y="320" text-anchor="middle" fill="white"
+    font-size="220" font-family="-apple-system,BlinkMacSystemFont,Helvetica Neue,Arial,sans-serif"
+    font-weight="700" letter-spacing="-8">FB</text>
+</svg>

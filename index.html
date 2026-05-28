@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#059669" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FlipBuch">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23059669'/%3E%3Ctext x='90' y='122' text-anchor='middle' fill='white' font-size='82' font-family='system-ui' font-weight='700'%3EFB%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.json">
+<title>FlipBuch — dein Vinted-Tracker</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.24.0/dist/tabler-icons.min.css">
+<script>
+  (function(){
+    var t=localStorage.getItem('flipbuch_theme');
+    if(t==='light'||t==='dark') document.documentElement.dataset.theme=t;
+  })();
+</script>
+<style>
+:root{
+  --bg:#F7F8FA;--card:#FFFFFF;--card-elevated:#FFFFFF;
+  --border:rgba(15,23,42,0.08);--border-strong:rgba(15,23,42,0.14);
+  --text:#0F172A;--text-secondary:#475569;--text-tertiary:#94A3B8;
+  --brand:#059669;--brand-hover:#047857;--brand-tint:#ECFDF5;
+  --brand-tint-strong:#D1FAE5;--brand-text:#065F46;--brand-bright:#10B981;
+  --positive:#059669;--negative:#DC2626;--positive-bg:#ECFDF5;--negative-bg:#FEF2F2;
+  --warn:#D97706;--warn-bg:rgba(245,158,11,0.10);--warn-border:rgba(245,158,11,0.30);
+  --hero-bg:linear-gradient(140deg,#064E3B 0%,#022C22 100%);
+  --hero-text:#ECFDF5;--hero-subtle:rgba(236,253,245,0.7);--hero-number:#34D399;
+  --hero-trend-bg:rgba(52,211,153,0.18);--hero-trend-text:#A7F3D0;
+  --modal-overlay:rgba(15,23,42,0.55);--input-bg:#FFFFFF;
+  --chip-bg:rgba(15,23,42,0.05);--chip-text:#475569;
+  --seg1:#10B981;--seg2:#14B8A6;--seg3:#06B6D4;--seg4:#3B82F6;--seg5:#8B5CF6;--seg-other:#94A3B8;
+  --shadow-elev:0 8px 24px rgba(15,23,42,0.08);--shadow-button:0 6px 18px rgba(5,150,105,0.32);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0B1220;--card:#131D2E;--card-elevated:#1A2538;
+  --border:rgba(255,255,255,0.07);--border-strong:rgba(255,255,255,0.14);
+  --text:#E2E8F0;--text-secondary:#94A3B8;--text-tertiary:#64748B;
+  --brand:#10B981;--brand-hover:#34D399;--brand-tint:rgba(16,185,129,0.10);
+  --brand-tint-strong:rgba(16,185,129,0.20);--brand-text:#6EE7B7;
+  --positive:#34D399;--negative:#F87171;--positive-bg:rgba(52,211,153,0.10);--negative-bg:rgba(248,113,113,0.10);
+  --warn:#F59E0B;--warn-bg:rgba(245,158,11,0.12);--warn-border:rgba(245,158,11,0.25);
+  --hero-bg:linear-gradient(140deg,#022C22 0%,#031815 100%);
+  --hero-text:#ECFDF5;--hero-subtle:rgba(236,253,245,0.65);--hero-number:#6EE7B7;
+  --hero-trend-bg:rgba(110,231,183,0.16);--hero-trend-text:#A7F3D0;
+  --modal-overlay:rgba(0,0,0,0.65);--input-bg:#0F1A2B;
+  --chip-bg:rgba(255,255,255,0.07);--chip-text:#94A3B8;
+  --shadow-elev:0 8px 24px rgba(0,0,0,0.35);--shadow-button:0 6px 18px rgba(16,185,129,0.25);
+}}
+:root[data-theme="dark"]{
+  --bg:#0B1220;--card:#131D2E;--card-elevated:#1A2538;
+  --border:rgba(255,255,255,0.07);--border-strong:rgba(255,255,255,0.14);
+  --text:#E2E8F0;--text-secondary:#94A3B8;--text-tertiary:#64748B;
+  --brand:#10B981;--brand-hover:#34D399;--brand-tint:rgba(16,185,129,0.10);
+  --brand-tint-strong:rgba(16,185,129,0.20);--brand-text:#6EE7B7;
+  --positive:#34D399;--negative:#F87171;--positive-bg:rgba(52,211,153,0.10);--negative-bg:rgba(248,113,113,0.10);
+  --warn:#F59E0B;--warn-bg:rgba(245,158,11,0.12);--warn-border:rgba(245,158,11,0.25);
+  --hero-bg:linear-gradient(140deg,#022C22 0%,#031815 100%);
+  --hero-text:#ECFDF5;--hero-subtle:rgba(236,253,245,0.65);--hero-number:#6EE7B7;
+  --hero-trend-bg:rgba(110,231,183,0.16);--hero-trend-text:#A7F3D0;
+  --modal-overlay:rgba(0,0,0,0.65);--input-bg:#0F1A2B;
+  --chip-bg:rgba(255,255,255,0.07);--chip-text:#94A3B8;
+  --shadow-elev:0 8px 24px rgba(0,0,0,0.35);--shadow-button:0 6px 18px rgba(16,185,129,0.25);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;transition:background-color .25s,color .25s;font-variant-numeric:tabular-nums}
+body{min-height:100vh;min-height:100dvh}
+button,input{font-family:inherit;color:inherit}
+#app{max-width:440px;margin:0 auto;min-height:100vh;min-height:100dvh;background:var(--bg);padding-bottom:104px;position:relative;transition:background-color .25s}
+[data-view]{padding:14px 14px 8px;animation:fadein .2s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.top-row{display:flex;align-items:center;justify-content:space-between;padding:8px 4px 10px}
+.month-pill{background:var(--card);border:1px solid var(--border);padding:8px 14px;border-radius:999px;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:4px;transition:background-color .25s,border-color .25s}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--brand-tint-strong);color:var(--brand-text);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px}
+[data-view] h1{font-size:24px;margin:6px 4px 14px;font-weight:600;letter-spacing:-.01em;color:var(--text)}
+.section-title{font-size:13px;font-weight:600;color:var(--text-secondary);margin:18px 4px 10px;text-transform:uppercase;letter-spacing:.04em}
+
+/* Hero */
+.hero{background:var(--hero-bg);border-radius:20px;padding:18px 20px 16px;margin-bottom:10px;color:var(--hero-text);position:relative;overflow:hidden;box-shadow:var(--shadow-elev);cursor:pointer;transition:transform .15s}
+.hero:active{transform:scale(.985)}
+.hero::before{content:"";position:absolute;top:-30%;right:-15%;width:55%;height:140%;background:radial-gradient(circle,rgba(52,211,153,.18),transparent 70%);pointer-events:none}
+.hero-label{font-size:12px;color:var(--hero-subtle);font-weight:600;letter-spacing:.08em;text-transform:uppercase;position:relative}
+.hero-num{font-size:36px;color:var(--hero-number);font-weight:700;margin-top:3px;letter-spacing:-.02em;line-height:1.1;position:relative;text-shadow:0 0 32px rgba(52,211,153,.25)}
+.hero-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px;flex-wrap:wrap;position:relative}
+.trend{font-size:12px;padding:5px 11px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.trend.up{background:var(--hero-trend-bg);color:var(--hero-trend-text)}
+.trend.down{background:rgba(248,113,113,.18);color:#FCA5A5}
+.trend.neutral{background:transparent;color:var(--hero-subtle);padding-left:0;font-weight:500}
+.trend i{font-size:14px}
+.gesamt{color:var(--hero-subtle);font-size:13px;font-weight:500}
+.hero-tap-hint{font-size:11px;color:var(--hero-subtle);display:inline-flex;align-items:center;gap:3px;margin-top:8px;position:relative;opacity:.8}
+.hero-tap-hint i{font-size:13px}
+
+/* Monatsziel */
+.goal-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 14px;margin-bottom:10px;transition:background-color .25s,border-color .25s}
+.goal-card[hidden]{display:none!important}
+.goal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.goal-label{font-size:13px;font-weight:600;color:var(--text-secondary);display:inline-flex;align-items:center;gap:5px}
+.goal-label i{font-size:15px;color:var(--brand)}
+.goal-nums{font-size:13px;font-weight:700;color:var(--text)}
+.goal-track{height:8px;background:var(--bg);border-radius:999px;overflow:hidden}
+.goal-fill{height:100%;background:var(--brand);border-radius:999px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.goal-fill.done{background:#10B981}
+.goal-sub{font-size:11px;color:var(--text-tertiary);margin-top:6px}
+
+/* Dashboard Chart */
+.dash-chart-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:12px 16px 12px;margin-bottom:10px;transition:background-color .25s,border-color .25s}
+.dash-chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px}
+.dash-chart-title{font-size:14px;font-weight:600;color:var(--text);flex-shrink:0}
+.chart-tabs{display:flex;background:var(--bg);border-radius:8px;padding:2px;gap:1px}
+.chart-tab{background:transparent;border:0;padding:5px 8px;border-radius:6px;font-size:11px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:background-color .15s,color .15s;white-space:nowrap}
+.chart-tab.active{background:var(--card-elevated);color:var(--text);box-shadow:0 1px 3px rgba(15,23,42,.06)}
+:root[data-theme="dark"] .chart-tab.active,:root:not([data-theme="light"]) .chart-tab.active{background:var(--brand-tint-strong);color:var(--brand-text);box-shadow:none}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .chart-tab.active{background:var(--brand-tint-strong);color:var(--brand-text);box-shadow:none}}
+.chart-row{display:flex;align-items:flex-end;justify-content:center;gap:5px;height:140px}
+.chart-row--dense{gap:2px}
+.bar{flex:1;max-width:28px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.bar-fill{width:100%;background:linear-gradient(180deg,#34D399 0%,#059669 100%);border-radius:6px 6px 0 0;min-height:0;transition:height .4s cubic-bezier(.2,.8,.2,1);box-shadow:0 2px 10px rgba(16,185,129,0.35)}
+.bar.active .bar-fill{background:linear-gradient(180deg,#6EE7B7 0%,#10B981 100%);box-shadow:0 4px 18px rgba(16,185,129,0.55)}
+.bar.negative .bar-fill{background:linear-gradient(180deg,#FCA5A5 0%,#DC2626 100%);box-shadow:0 2px 10px rgba(220,38,38,0.3)}
+.bar-label{font-size:10px;color:var(--text-secondary);font-weight:500;white-space:nowrap;overflow:hidden;max-width:100%;text-align:center}
+.chart-empty-dash{text-align:center;padding:28px 8px;color:var(--text-tertiary)}
+.chart-empty-dash i{font-size:32px;opacity:.5}
+.chart-empty-dash p{font-size:12px;margin:10px 0 0;color:var(--text-secondary);line-height:1.5}
+
+/* Tiles */
+.tile-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px}
+.tile{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px;transition:background-color .25s,border-color .25s,transform .15s;cursor:pointer;position:relative}
+.tile:active{transform:scale(.96)}
+.tile-label{font-size:11px;color:var(--text-secondary);line-height:1.3;font-weight:500;padding-right:14px}
+.tile-num{font-size:18px;font-weight:600;margin-top:5px;letter-spacing:-.01em;color:var(--text)}
+.tile-sub{font-size:11px;color:var(--text-tertiary);margin-top:2px}
+.tile-chevron{position:absolute;top:10px;right:9px;font-size:13px;color:var(--text-tertiary)}
+
+/* Analyse */
+.analyse-header{display:flex;align-items:center;gap:10px;padding:8px 4px 18px}
+.analyse-back{background:transparent;border:0;color:var(--text);display:inline-flex;align-items:center;justify-content:center;padding:8px;border-radius:10px;cursor:pointer;margin-left:-8px;transition:background-color .15s}
+.analyse-back:active{background:var(--border)}
+.analyse-back i{font-size:22px}
+.analyse-view-title{font-size:18px;font-weight:600;color:var(--text);letter-spacing:-.01em}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px 18px 14px;margin-bottom:12px}
+.chart-title{font-size:14px;font-weight:600;margin-bottom:14px;color:var(--text)}
+.chart-row-big{display:flex;align-items:flex-end;gap:10px;height:110px}
+.bar-big{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.bar-fill-big{width:100%;background:var(--brand-tint-strong);border-radius:5px 5px 0 0;min-height:6px;transition:height .4s cubic-bezier(.2,.8,.2,1)}
+.bar-big.active .bar-fill-big{background:var(--brand)}
+.bar-label-big{font-size:11px;color:var(--text-secondary);font-weight:500}
+.chart-empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:14px 8px 4px}
+.chart-empty i{font-size:32px;color:var(--text-tertiary);opacity:.6}
+.chart-empty p{font-size:13px;margin:10px 0 0;color:var(--text-secondary);line-height:1.5;max-width:280px}
+
+/* Donut */
+.donut-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px 18px;margin-bottom:12px}
+.donut-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.donut-title{font-size:14px;font-weight:600;color:var(--text)}
+.donut-tabs{display:flex;background:var(--bg);border-radius:9px;padding:3px;gap:2px}
+.donut-tab{background:transparent;border:0;padding:5px 9px;border-radius:7px;font-size:11px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:background-color .15s,color .15s}
+.donut-tab.active{background:var(--card-elevated);color:var(--text);box-shadow:0 1px 3px rgba(15,23,42,.06)}
+:root[data-theme="dark"] .donut-tab.active,:root:not([data-theme="light"]) .donut-tab.active{box-shadow:none;background:var(--brand-tint-strong);color:var(--brand-text)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .donut-tab.active{box-shadow:none;background:var(--brand-tint-strong);color:var(--brand-text)}}
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.donut-svg-wrap{position:relative;width:180px;height:180px}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.donut-center-label{font-size:11px;color:var(--text-secondary);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.donut-center-value{font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.01em;margin-top:2px}
+.donut-legend{display:flex;flex-direction:column;gap:6px;width:100%}
+.legend-row{display:flex;align-items:center;gap:10px;padding:6px 4px;font-size:13px}
+.legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.legend-name{flex:1;color:var(--text);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.legend-pct{color:var(--text-secondary);font-size:12px;font-weight:500;min-width:36px;text-align:right}
+.legend-value{color:var(--text);font-weight:600;font-size:13px;min-width:64px;text-align:right}
+.donut-empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:24px 8px 12px}
+.donut-empty i{font-size:32px;color:var(--text-tertiary);opacity:.6}
+.donut-empty p{font-size:13px;margin:10px 0 0;color:var(--text-secondary);line-height:1.5;max-width:280px}
+.donut-note{font-size:11px;color:var(--text-tertiary);text-align:center;margin-top:8px;padding:0 8px}
+
+/* Top */
+.top-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px 18px 14px;margin-bottom:12px}
+.top-card-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px}
+.top-list{display:flex;flex-direction:column;gap:4px}
+.top-row-item{position:relative;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;overflow:hidden;font-size:13px}
+.top-row-item::before{content:"";position:absolute;top:0;bottom:0;left:0;width:var(--bar-pct,0%);background:var(--brand-tint);transition:width .4s cubic-bezier(.2,.8,.2,1)}
+.top-row-item>*{position:relative;z-index:1}
+.top-rank{width:20px;font-size:12px;font-weight:700;color:var(--text-tertiary);text-align:center;flex-shrink:0}
+.top-name{flex:1;font-weight:500;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-profit{color:var(--positive);font-weight:700;font-size:14px;flex-shrink:0}
+.top-empty{padding:18px 8px;text-align:center;color:var(--text-secondary);font-size:13px;line-height:1.5}
+
+/* Items & Kosten */
+.filter-tabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:14px}
+.tab{flex:1;background:transparent;border:0;padding:10px 6px;border-radius:9px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:background-color .15s,color .15s;display:inline-flex;align-items:center;justify-content:center;gap:5px}
+.tab.active{background:var(--brand-tint);color:var(--brand-text)}
+.tab .count{background:rgba(0,0,0,.06);padding:1px 7px;border-radius:999px;font-size:11px;min-width:20px;text-align:center;transition:background-color .15s}
+:root[data-theme="dark"] .tab .count{background:rgba(255,255,255,.08)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tab .count{background:rgba(255,255,255,.08)}}
+.tab.active .count{background:var(--brand);color:#fff}
+.item-list{display:flex;flex-direction:column;gap:8px}
+.item-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:background-color .25s,border-color .25s,transform .15s;cursor:pointer}
+.item-card:active{transform:scale(.99)}
+.item-card--stale{border-color:var(--warn-border)}
+.cost-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:background-color .25s,border-color .25s}
+.item-main{flex:1;min-width:0}
+.item-name{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.item-meta{font-size:12px;color:var(--text-secondary);margin-top:3px;line-height:1.4}
+.item-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--chip-bg);color:var(--chip-text);font-size:11px;font-weight:500;padding:2px 8px;border-radius:999px}
+.chip i{font-size:11px}
+.chip--warn{background:var(--warn-bg);color:var(--warn)}
+.chip--cost{background:rgba(220,38,38,.08);color:var(--negative)}
+.item-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.item-side{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.profit{font-weight:700;font-size:15px;letter-spacing:-.01em}
+.profit.positive{color:var(--positive)}
+.profit.negative{color:var(--negative)}
+.action-sell{background:var(--brand);color:#fff;border:0;padding:8px 12px;border-radius:9px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;cursor:pointer;transition:background-color .15s,transform .15s}
+.action-sell:active{background:var(--brand-hover);transform:scale(.96)}
+.action-sell i{font-size:14px}
+.action-del{background:transparent;border:0;color:var(--text-tertiary);padding:6px;cursor:pointer;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;transition:background-color .15s,color .15s}
+.action-del:hover,.action-del:active{color:var(--negative);background:var(--negative-bg)}
+.action-del i{font-size:18px}
+.empty{text-align:center;padding:48px 24px;color:var(--text-secondary)}
+.empty i{font-size:48px;color:var(--text-tertiary);opacity:.6}
+.empty p{font-size:14px;margin:14px 0 0;line-height:1.5}
+
+/* Profil */
+#profile-stats{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:6px}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);font-size:14px}
+.stat-row:last-child{border-bottom:0}
+.stat-row span{color:var(--text-secondary)}
+.stat-row strong{font-weight:600;color:var(--text)}
+.theme-toggle{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:6px}
+.theme-btn{background:transparent;border:0;padding:11px 8px;font-size:13px;font-weight:500;color:var(--text-secondary);border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:background-color .15s,color .15s}
+.theme-btn i{font-size:16px}
+.theme-btn.active{background:var(--brand-tint);color:var(--brand-text)}
+.goal-setting{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:6px}
+.goal-setting label{font-size:13px;color:var(--text-secondary);font-weight:500;margin-bottom:0}
+.goal-setting label input{margin-top:8px;margin-bottom:10px}
+.goal-save-btn{width:100%;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:0;background:var(--brand);color:#fff;transition:background-color .15s,transform .15s}
+.goal-save-btn:active{background:var(--brand-hover);transform:scale(.98)}
+.steuer-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:6px}
+.steuer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.steuer-title{font-size:14px;font-weight:600;color:var(--text);display:inline-flex;align-items:center;gap:6px}
+.steuer-title i{font-size:16px;color:var(--text-secondary)}
+.steuer-amount{font-size:14px;font-weight:700;color:var(--text)}
+.steuer-track{height:10px;background:var(--bg);border-radius:999px;overflow:hidden;margin-bottom:8px}
+.steuer-fill{height:100%;border-radius:999px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.steuer-fill.safe{background:var(--brand)}
+.steuer-fill.warn{background:#F59E0B}
+.steuer-fill.danger{background:var(--negative)}
+.steuer-note{font-size:12px;color:var(--text-secondary);line-height:1.5}
+.steuer-warning{font-size:12px;color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-border);padding:10px 12px;border-radius:10px;margin-top:10px;line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+.steuer-warning i{font-size:15px;flex-shrink:0;margin-top:1px}
+.profile-actions{display:flex;flex-direction:column;gap:8px}
+.profile-actions button{padding:14px;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:background-color .15s,border-color .25s}
+.profile-actions button:active{background:var(--bg)}
+.profile-actions .danger{color:var(--negative)}
+/* Wegweiser */
+.wegweiser-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:6px;transition:background-color .25s,border-color .25s}
+.wegweiser-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;margin-bottom:12px}
+.wegweiser-badge.safe{background:var(--positive-bg);color:var(--positive)}
+.wegweiser-badge.prepare{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-border)}
+.wegweiser-badge.urgent{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-border)}
+.wegweiser-badge.crossed{background:var(--negative-bg);color:var(--negative)}
+.wegweiser-intro{font-size:13px;color:var(--text-secondary);margin:0 0 16px;line-height:1.5}
+.step-list{display:flex;flex-direction:column}
+.step-item{display:flex;gap:12px;position:relative}
+.step-item:not(:last-child)::after{content:"";position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--border);z-index:0}
+.step-circle{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text-tertiary);flex-shrink:0;background:var(--card);position:relative;z-index:1;transition:all .2s;margin-top:1px}
+.step-item.step-active .step-circle{border-color:var(--warn);color:var(--warn);background:var(--warn-bg)}
+.step-item.step-urgent .step-circle{border-color:var(--negative);color:var(--negative);background:var(--negative-bg)}
+.step-item.step-done .step-circle{border-color:var(--positive);background:var(--positive);color:#fff;border-width:0}
+.step-body{flex:1;padding:2px 0 18px}
+.step-title{font-size:13px;font-weight:600;color:var(--text)}
+.step-item.step-done .step-title{color:var(--text-tertiary);text-decoration:line-through}
+.step-desc{font-size:12px;color:var(--text-secondary);margin-top:3px;line-height:1.5}
+.step-item.step-done .step-desc{color:var(--text-tertiary)}
+.step-action{margin-top:7px}
+.step-check-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:5px 11px;font-size:11px;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.step-check-btn i{font-size:13px}
+.step-check-btn:active{transform:scale(.96)}
+.step-item.step-done .step-check-btn{background:var(--positive-bg);border-color:var(--positive);color:var(--positive)}
+.wegweiser-disclaimer{font-size:11px;color:var(--text-tertiary);margin-top:4px;padding:10px 12px;background:var(--bg);border-radius:8px;line-height:1.5}
+.wegweiser-disclaimer strong{color:var(--text-secondary)}
+
+.profile-info{font-size:12px;color:var(--text-tertiary);text-align:center;margin-top:24px;padding:0 20px;line-height:1.5}
+
+/* Suche & Sortierung */
+.items-controls{display:flex;gap:8px;margin-bottom:12px;align-items:center}
+.search-wrap{flex:1;position:relative;display:flex;align-items:center}
+.search-wrap>.ti-search{position:absolute;left:11px;font-size:16px;color:var(--text-tertiary);pointer-events:none}
+.search-input{width:100%;padding:10px 34px 10px 34px;border:1px solid var(--border);border-radius:11px;background:var(--input-bg);color:var(--text);font-size:14px;transition:border-color .15s,box-shadow .15s;font-family:inherit}
+.search-input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-tint-strong)}
+.search-input::placeholder{color:var(--text-tertiary)}
+.search-clear{position:absolute;right:8px;background:transparent;border:0;color:var(--text-tertiary);cursor:pointer;padding:4px;display:flex;align-items:center;border-radius:6px;font-size:16px;transition:color .15s}
+.search-clear:active{color:var(--text)}
+.sort-select{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:10px 8px;font-size:12px;color:var(--text);cursor:pointer;flex-shrink:0;font-family:inherit;transition:border-color .15s,background-color .25s}
+
+/* Preisvorschlag */
+.price-suggest{margin-bottom:14px}
+.price-suggest-label{font-size:12px;color:var(--text-secondary);font-weight:500;margin-bottom:7px}
+.price-suggest-btns{display:flex;gap:6px}
+.price-btn{flex:1;padding:8px 2px;border:1px solid var(--border);border-radius:9px;background:var(--bg);color:var(--text);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;text-align:center;line-height:1.3}
+.price-btn span{display:block;font-size:10px;color:var(--text-tertiary);font-weight:400;margin-top:1px}
+.price-btn:active{transform:scale(.97)}
+.price-btn.selected{background:var(--brand-tint);border-color:var(--brand);color:var(--brand-text)}
+.price-btn.selected span{color:var(--brand-text);opacity:.8}
+
+/* App installieren */
+.install-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:6px;transition:background-color .25s,border-color .25s}
+.install-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.install-icon{width:44px;height:44px;border-radius:12px;background:var(--brand-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.install-icon i{font-size:22px;color:var(--brand)}
+.install-title{font-size:14px;font-weight:600;color:var(--text)}
+.install-sub{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.install-primary-btn{width:100%;padding:12px;border-radius:10px;background:var(--brand);color:#fff;border:0;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;transition:background-color .15s,transform .15s}
+.install-primary-btn i{font-size:18px}
+.install-primary-btn:active{background:var(--brand-hover);transform:scale(.98)}
+.install-manual{font-size:12px;color:var(--text-secondary);line-height:1.8;padding:10px 12px;background:var(--bg);border-radius:8px}
+.install-manual strong{color:var(--text)}
+
+/* Bottom nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:flex-end;padding:10px 6px max(14px,env(safe-area-inset-bottom));max-width:440px;margin:0 auto;z-index:20}
+.nav-item{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text-tertiary);font-size:11px;cursor:pointer;padding:4px 0;font-weight:500;transition:color .15s}
+.nav-item i{font-size:24px}
+.nav-item.active{color:var(--brand)}
+.add-btn{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--brand);color:#fff;border:0;display:flex;align-items:center;justify-content:center;margin-top:-26px;cursor:pointer;box-shadow:var(--shadow-button);transition:transform .15s,background-color .15s}
+.add-btn:active{transform:scale(.93);background:var(--brand-hover)}
+.add-btn i{font-size:28px}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:var(--modal-overlay);display:flex;align-items:flex-end;justify-content:center;z-index:100;animation:fadein .2s ease;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.modal[hidden]{display:none!important}
+.modal-card{background:var(--card-elevated);width:100%;max-width:440px;border-radius:22px 22px 0 0;padding:22px 20px max(28px,env(safe-area-inset-bottom));max-height:92vh;overflow-y:auto;animation:slideup .24s cubic-bezier(.2,.8,.2,1);color:var(--text)}
+@keyframes slideup{from{transform:translateY(24px);opacity:.85}to{transform:translateY(0);opacity:1}}
+@media(min-width:500px){.modal{align-items:center}.modal-card{border-radius:22px;animation:fadein .2s ease}}
+.modal-card header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.modal-card h2{margin:0;font-size:18px;font-weight:600;color:var(--text)}
+.close{background:transparent;border:0;color:var(--text-secondary);cursor:pointer;padding:6px;line-height:1;display:inline-flex;border-radius:8px;transition:background-color .15s}
+.close:hover{background:var(--bg)}
+.close i{font-size:22px}
+label{display:block;font-size:13px;color:var(--text-secondary);margin-bottom:14px;font-weight:500}
+label input{display:block;width:100%;margin-top:6px;padding:12px 14px;font-size:16px;border:1px solid var(--border-strong);border-radius:11px;background:var(--input-bg);color:var(--text);transition:border-color .15s,box-shadow .15s}
+label input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-tint-strong)}
+label input::placeholder{color:var(--text-tertiary)}
+.status-toggle{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--bg);border:1px solid var(--border);border-radius:11px;padding:4px;margin-bottom:14px}
+.status-btn{background:transparent;border:0;padding:10px 8px;font-size:13px;font-weight:500;color:var(--text-secondary);border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:background-color .15s}
+.status-btn i{font-size:15px}
+.status-btn.active{background:var(--brand-tint);color:var(--brand-text)}
+.sold-fields[hidden]{display:none!important}
+.item-name-display{background:var(--brand-tint);color:var(--brand-text);padding:10px 14px;border-radius:10px;font-size:14px;font-weight:600;margin-bottom:16px}
+.profit-preview{padding:10px 14px;font-size:14px;color:var(--text-secondary);background:var(--bg);border-radius:10px;margin-bottom:16px;min-height:42px;display:flex;align-items:center}
+.profit-preview strong{font-weight:700;margin-left:6px}
+.profit-preview strong.positive{color:var(--positive)}
+.profit-preview strong.negative{color:var(--negative)}
+.modal-actions{display:flex;gap:8px;margin-top:6px}
+.modal-actions button{flex:1;padding:14px;border-radius:11px;font-size:14px;font-weight:600;cursor:pointer;border:0;transition:opacity .15s,background-color .15s,transform .15s}
+.modal-actions .primary{background:var(--brand);color:#fff}
+.modal-actions .primary:active{background:var(--brand-hover);transform:scale(.98)}
+.modal-actions .secondary{background:var(--bg);color:var(--text);border:1px solid var(--border);font-weight:500}
+.modal-actions .secondary:active{transform:scale(.98)}
+.modal-actions .danger{background:transparent;color:var(--negative);border:1px solid var(--border);font-weight:500}
+.modal-actions .danger:active{background:var(--negative-bg)}
+
+/* Action Sheet */
+.action-sheet-btn{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background-color .15s,transform .15s;margin-bottom:8px}
+.action-sheet-btn:active{transform:scale(.98)}
+.action-sheet-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.action-sheet-icon.green{background:var(--brand-tint);color:var(--brand)}
+.action-sheet-icon.red{background:var(--negative-bg);color:var(--negative)}
+.action-sheet-text{text-align:left}
+.action-sheet-title{font-size:15px;font-weight:600;color:var(--text)}
+.action-sheet-sub{font-size:12px;color:var(--text-secondary);margin-top:2px}
+
+/* Toast */
+.toast{position:fixed;bottom:108px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--brand);color:#fff;padding:12px 22px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s,transform .3s cubic-bezier(.2,.8,.2,1);z-index:200;display:flex;align-items:center;gap:8px;pointer-events:none;box-shadow:0 10px 32px rgba(5,150,105,.40)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast i{font-size:18px}
+
+/* Welcome */
+.welcome{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start}
+.welcome i{font-size:22px;color:var(--brand);flex-shrink:0;margin-top:2px}
+.welcome p{margin:0;font-size:13px;line-height:1.5;color:var(--text-secondary)}
+.welcome strong{color:var(--text);font-weight:600}
+
+/* Spracheingabe */
+.voice-wrap{position:relative;margin-top:6px}
+.voice-wrap input{display:block;width:100%;margin-top:0;padding:12px 40px 12px 14px;font-size:16px;border:1px solid var(--border-strong);border-radius:11px;background:var(--input-bg);color:var(--text);transition:border-color .15s,box-shadow .15s}
+.voice-wrap input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-tint-strong)}
+.voice-wrap input::placeholder{color:var(--text-tertiary)}
+.voice-btn{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:var(--text-tertiary);cursor:pointer;padding:6px;border-radius:8px;display:flex;align-items:center;font-size:20px;transition:color .15s}
+.voice-btn:active{color:var(--brand)}
+.voice-btn.recording{color:#EF4444;animation:pulse-mic .7s infinite}
+@keyframes pulse-mic{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* DAC7 */
+.dac7-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 14px;margin-bottom:10px;transition:background-color .25s,border-color .25s}
+.dac7-card[hidden]{display:none!important}
+.dac7-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.dac7-title{font-size:13px;font-weight:600;color:var(--text-secondary);display:inline-flex;align-items:center;gap:5px}
+.dac7-title i{font-size:14px}
+.dac7-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--chip-bg);color:var(--text-tertiary);letter-spacing:.04em}
+.dac7-rows{display:flex;flex-direction:column;gap:9px}
+.dac7-row-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.dac7-row-label{color:var(--text-secondary);font-weight:500}
+.dac7-row-val{color:var(--text);font-weight:700}
+.dac7-track{height:6px;background:var(--bg);border-radius:999px;overflow:hidden}
+.dac7-fill{height:100%;border-radius:999px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.dac7-fill.safe{background:var(--brand)}
+.dac7-fill.warn{background:#F59E0B}
+.dac7-fill.danger{background:var(--negative)}
+.dac7-note{font-size:11px;color:var(--text-tertiary);margin-top:10px;line-height:1.5}
+.dac7-note.alert{color:var(--warn)}
+
+</style>
+</head>
+<body>
+<main id="app">
+
+  <!-- Dashboard -->
+  <section data-view="dashboard">
+    <div class="top-row">
+      <span class="month-pill"><span class="dash-month">Mai 2026</span></span>
+      <div class="avatar">B</div>
+    </div>
+    <div class="welcome" id="welcome" hidden>
+      <i class="ti ti-sparkles"></i>
+      <p><strong>Willkommen bei FlipBuch.</strong> Tippe auf das grüne Plus, um deinen ersten Artikel einzutragen.</p>
+    </div>
+    <div class="hero" id="hero-card">
+      <div class="hero-label">Gewinn diesen Monat</div>
+      <div class="hero-num" id="hero-profit">0,00 €</div>
+      <div class="hero-bottom">
+        <span class="trend neutral" id="hero-trend">noch keine Verkäufe</span>
+        <span class="gesamt" id="hero-total">Gesamt 0,00 €</span>
+      </div>
+      <div class="hero-tap-hint"><i class="ti ti-chart-dots"></i> Detailanalyse öffnen</div>
+    </div>
+    <div class="goal-card" id="goal-card" hidden>
+      <div class="goal-head">
+        <span class="goal-label"><i class="ti ti-target"></i> Monatsziel</span>
+        <span class="goal-nums" id="goal-nums">0 / 0 €</span>
+      </div>
+      <div class="goal-track"><div class="goal-fill" id="goal-fill" style="width:0%"></div></div>
+      <div class="goal-sub" id="goal-sub"></div>
+    </div>
+
+    <div class="tile-grid">
+      <div class="tile" data-analyse="Umsatz">
+        <i class="ti ti-chevron-right tile-chevron"></i>
+        <div class="tile-label">Umsatz · Monat</div>
+        <div class="tile-num" id="tile-revenue-month">0 €</div>
+        <div class="tile-sub" id="tile-revenue-total">Gesamt 0 €</div>
+      </div>
+      <div class="tile" data-analyse="Verkäufe">
+        <i class="ti ti-chevron-right tile-chevron"></i>
+        <div class="tile-label">Verkauft · Monat</div>
+        <div class="tile-num" id="tile-sold-month">0</div>
+        <div class="tile-sub" id="tile-sold-total">Gesamt 0</div>
+      </div>
+      <div class="tile" data-analyse="Lager">
+        <i class="ti ti-chevron-right tile-chevron"></i>
+        <div class="tile-label">Im Lager</div>
+        <div class="tile-num" id="tile-lager-value">0 €</div>
+        <div class="tile-sub" id="tile-lager-count">0 Artikel</div>
+      </div>
+    </div>
+
+    <!-- Säulendiagramm unter den Tiles -->
+    <div class="dash-chart-card">
+      <div class="dash-chart-head">
+        <span class="dash-chart-title" id="dash-chart-title">Tagesbilanz</span>
+        <div class="chart-tabs" id="chart-tabs">
+          <button class="chart-tab active" data-chart-mode="tag">Tag</button>
+          <button class="chart-tab" data-chart-mode="woche">Woche</button>
+          <button class="chart-tab" data-chart-mode="monat">Monat</button>
+          <button class="chart-tab" data-chart-mode="jahr">Jahr</button>
+        </div>
+      </div>
+      <div class="chart-row" id="dash-chart-row"></div>
+      <div class="chart-empty-dash" id="dash-chart-empty" hidden>
+        <i class="ti ti-chart-bar"></i>
+        <p>Hier siehst du deinen Gewinnverlauf, sobald du erste Artikel verkauft hast.</p>
+      </div>
+    </div>
+
+    <!-- DAC7 Finanzamt-Meldegrenze -->
+    <div class="dac7-card" id="dac7-card" hidden>
+      <div class="dac7-head">
+        <span class="dac7-title"><i class="ti ti-building-bank"></i> Finanzamt-Meldegrenze</span>
+        <span class="dac7-badge">DAC7</span>
+      </div>
+      <div class="dac7-rows">
+        <div>
+          <div class="dac7-row-head"><span class="dac7-row-label">Verkäufe dieses Jahr</span><span class="dac7-row-val" id="dac7-sales-val">0 / 30</span></div>
+          <div class="dac7-track"><div class="dac7-fill safe" id="dac7-sales-fill" style="width:0%"></div></div>
+        </div>
+        <div>
+          <div class="dac7-row-head"><span class="dac7-row-label">Umsatz dieses Jahr</span><span class="dac7-row-val" id="dac7-rev-val">0 € / 2.000 €</span></div>
+          <div class="dac7-track"><div class="dac7-fill safe" id="dac7-rev-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="dac7-note" id="dac7-note">Ab mehr als 30 Verkäufen ODER mehr als 2.000 € Umsatz/Jahr meldet Vinted deine Daten ans Finanzamt (DAC7 / PStTG).</div>
+    </div>
+
+  </section>
+
+  <!-- Analyse -->
+  <section data-view="analyse" hidden>
+    <div class="analyse-header">
+      <button class="analyse-back" id="analyse-back"><i class="ti ti-arrow-left"></i></button>
+      <span class="analyse-view-title" id="analyse-view-title">Analyse</span>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Gewinn der letzten 6 Monate</div>
+      <div class="chart-row-big" id="chart-row"></div>
+      <div class="chart-empty" id="chart-empty" hidden>
+        <i class="ti ti-chart-bar"></i>
+        <p>Dein Gewinn-Trend erscheint hier, sobald du Verkäufe über mehrere Monate eingetragen hast.</p>
+      </div>
+    </div>
+    <div class="donut-card">
+      <div class="donut-header">
+        <div class="donut-title">Aufschlüsselung</div>
+        <div class="donut-tabs" id="donut-tabs">
+          <button class="donut-tab active" data-field="supplier">Quelle</button>
+          <button class="donut-tab" data-field="kategorie">Kategorie</button>
+          <button class="donut-tab" data-field="soldPlatform">Plattform</button>
+        </div>
+      </div>
+      <div class="donut-wrap" id="donut-wrap">
+        <div class="donut-svg-wrap">
+          <svg id="donut-svg" viewBox="0 0 180 180" width="180" height="180"></svg>
+          <div class="donut-center">
+            <div class="donut-center-label">Gesamt</div>
+            <div class="donut-center-value" id="donut-center-value">0 €</div>
+          </div>
+        </div>
+        <div class="donut-legend" id="donut-legend"></div>
+      </div>
+      <div class="donut-note" id="donut-note" hidden></div>
+      <div class="donut-empty" id="donut-empty" hidden>
+        <i class="ti ti-chart-donut"></i>
+        <p id="donut-empty-text"></p>
+      </div>
+    </div>
+    <div class="top-card">
+      <div class="top-card-title">Top Verkäufe</div>
+      <div class="top-list" id="top-list"></div>
+      <div class="top-empty" id="top-empty" hidden>Hier siehst du deine besten Verkäufe.</div>
+    </div>
+    <div class="top-card">
+      <div class="top-card-title">Beste Einkaufsquellen · ROI</div>
+      <div class="top-list" id="source-list"></div>
+      <div class="top-empty" id="source-empty" hidden>Trag bei deinen Artikeln eine Bezugsquelle ein — dann siehst du hier, welche Quellen am meisten Gewinn bringen.</div>
+    </div>
+  </section>
+
+  <!-- Artikel & Kosten -->
+  <section data-view="items" hidden>
+    <h1>Artikel & Kosten</h1>
+    <div class="filter-tabs">
+      <button class="tab active" data-filter="lager">Lager <span class="count" id="count-lager">0</span></button>
+      <button class="tab" data-filter="verkauft">Verkauft <span class="count" id="count-verkauft">0</span></button>
+      <button class="tab" data-filter="kosten">Kosten <span class="count" id="count-kosten">0</span></button>
+    </div>
+    <div class="items-controls">
+      <div class="search-wrap">
+        <i class="ti ti-search"></i>
+        <input type="text" id="item-search" class="search-input" placeholder="Suchen …" autocomplete="off">
+        <button class="search-clear" id="search-clear" hidden><i class="ti ti-x"></i></button>
+      </div>
+      <select class="sort-select" id="sort-select">
+        <option value="date-desc">Neueste</option>
+        <option value="date-asc">Älteste</option>
+        <option value="val-desc">Wert ↓</option>
+        <option value="val-asc">Wert ↑</option>
+      </select>
+    </div>
+    <div class="item-list" id="item-list"></div>
+  </section>
+
+  <!-- Profil -->
+  <section data-view="profile" hidden>
+    <h1>Profil</h1>
+    <div id="profile-stats"></div>
+    <h2 class="section-title">Steuer-Check</h2>
+    <div class="steuer-card">
+      <div class="steuer-head">
+        <span class="steuer-title"><i class="ti ti-receipt-tax"></i> Jahresumsatz</span>
+        <span class="steuer-amount" id="steuer-amount">0 €</span>
+      </div>
+      <div class="steuer-track"><div class="steuer-fill safe" id="steuer-fill" style="width:0%"></div></div>
+      <div class="steuer-note" id="steuer-note">Kleinunternehmer-Grenze: 25.000 € / Jahr (ab 2025)</div>
+      <div class="steuer-warning" id="steuer-warning" hidden>
+        <i class="ti ti-alert-triangle"></i><span id="steuer-warning-text"></span>
+      </div>
+    </div>
+    <h2 class="section-title">Wegweiser: Kleinunternehmergrenze</h2>
+    <div class="wegweiser-card" id="wegweiser-card"></div>
+    <h2 class="section-title">Monatsziel</h2>
+    <div class="goal-setting">
+      <label>Gewinn-Ziel diesen Monat (€)
+        <input type="number" id="goal-input" step="1" min="0" placeholder="z. B. 80" inputmode="numeric">
+      </label>
+      <button class="goal-save-btn" id="goal-save-btn"><i class="ti ti-check"></i> Ziel speichern</button>
+    </div>
+    <h2 class="section-title">Erscheinungsbild</h2>
+    <div class="theme-toggle" id="theme-toggle">
+      <button class="theme-btn" data-theme="light"><i class="ti ti-sun"></i>Hell</button>
+      <button class="theme-btn" data-theme="system"><i class="ti ti-device-mobile"></i>System</button>
+      <button class="theme-btn" data-theme="dark"><i class="ti ti-moon"></i>Dunkel</button>
+    </div>
+    <h2 class="section-title">App installieren</h2>
+    <div class="install-card">
+      <div class="install-top">
+        <div class="install-icon"><i class="ti ti-device-mobile"></i></div>
+        <div>
+          <div class="install-title">Zum Homescreen hinzufügen</div>
+          <div class="install-sub">Öffne FlipBuch wie eine echte App — ohne Browser</div>
+        </div>
+      </div>
+      <button class="install-primary-btn" id="install-btn" hidden><i class="ti ti-download"></i> Jetzt installieren</button>
+      <div class="install-manual">
+        <strong>iPhone / iPad:</strong> Safari öffnen → Teilen-Symbol → „Zum Home-Bildschirm"<br>
+        <strong>Android:</strong> Chrome → Menü ⋮ → „Zum Startbildschirm hinzufügen"
+      </div>
+    </div>
+    <h2 class="section-title">Daten</h2>
+    <div class="profile-actions">
+      <button id="export-btn"><i class="ti ti-download"></i> Exportieren (JSON)</button>
+      <button id="import-btn"><i class="ti ti-upload"></i> Importieren (JSON)</button>
+      <button id="steuer-export-btn"><i class="ti ti-file-invoice"></i> Steuer-Export (CSV)</button>
+      <button id="clear-btn" class="danger"><i class="ti ti-trash"></i> Alle Daten löschen</button>
+    </div>
+    <input type="file" id="import-input" accept=".json" style="display:none">
+    <div class="profile-info">FlipBuch v1.1 · Alle Daten werden lokal in diesem Browser gespeichert.<br><br>Die Steuer-Hinweise in dieser App sind vereinfachte Orientierungshilfen und kein Rechtsrat. Für verbindliche Auskunft immer einen Steuerberater hinzuziehen.</div>
+  </section>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-nav="dashboard"><i class="ti ti-layout-dashboard"></i>Übersicht</button>
+    <button class="nav-item" data-nav="items"><i class="ti ti-package"></i>Artikel</button>
+    <button class="add-btn" id="open-add-sheet" aria-label="Neu"><i class="ti ti-plus"></i></button>
+    <button class="nav-item" data-nav="items" data-filter="verkauft"><i class="ti ti-coin"></i>Verkäufe</button>
+    <button class="nav-item" data-nav="profile"><i class="ti ti-user"></i>Profil</button>
+  </nav>
+</main>
+
+<div class="toast" id="toast" hidden></div>
+<datalist id="suppliers-list"></datalist>
+<datalist id="kategorien-list"></datalist>
+<datalist id="platforms-list">
+  <option value="Vinted"></option><option value="Kleinanzeigen"></option>
+  <option value="eBay"></option><option value="Depop"></option><option value="Facebook Marketplace"></option>
+</datalist>
+<datalist id="cost-kat-list">
+  <option value="Verpackung"></option><option value="Versand"></option>
+  <option value="Plattformgebühr"></option><option value="Sonstiges"></option>
+</datalist>
+
+<!-- Action Sheet -->
+<div class="modal" id="modal-add-sheet" hidden>
+  <div class="modal-card">
+    <header>
+      <h2>Was möchtest du erfassen?</h2>
+      <button class="close" data-close-modal><i class="ti ti-x"></i></button>
+    </header>
+    <button class="action-sheet-btn" id="open-add-item">
+      <div class="action-sheet-icon green"><i class="ti ti-package"></i></div>
+      <div class="action-sheet-text">
+        <div class="action-sheet-title">Artikel</div>
+        <div class="action-sheet-sub">Ein- oder Verkauf erfassen</div>
+      </div>
+    </button>
+    <button class="action-sheet-btn" id="open-add-cost">
+      <div class="action-sheet-icon red"><i class="ti ti-receipt"></i></div>
+      <div class="action-sheet-text">
+        <div class="action-sheet-title">Zusatzkosten</div>
+        <div class="action-sheet-sub">Versandtaschen, Gebühren, Material …</div>
+      </div>
+    </button>
+  </div>
+</div>
+
+<!-- Modal: Artikel hinzufügen -->
+<div class="modal" id="modal-add" hidden>
+  <div class="modal-card">
+    <header><h2>Neuer Artikel</h2><button class="close" data-close-modal><i class="ti ti-x"></i></button></header>
+    <form id="form-add" autocomplete="off">
+      <label>Name<div class="voice-wrap"><input type="text" name="name" required placeholder="z. B. Nike Hoodie schwarz, M"><button type="button" class="voice-btn" title="Spracheingabe"><i class="ti ti-microphone"></i></button></div></label>
+      <label>Einkaufspreis (€)<input type="number" name="purchasePrice" step="0.01" min="0" required inputmode="decimal" placeholder="0,00"></label>
+      <label>Eingekauft am<input type="date" name="purchaseDate"></label>
+      <label>Bezugsquelle <span style="color:var(--text-tertiary);font-weight:400">(optional)</span><input type="text" name="supplier" list="suppliers-list" placeholder="z. B. Flohmarkt, Vinted-Sale"></label>
+      <label>Kategorie <span style="color:var(--text-tertiary);font-weight:400">(optional)</span><input type="text" name="kategorie" list="kategorien-list" placeholder="z. B. Hoodie, Schuhe, Hose"></label>
+      <div class="modal-actions">
+        <button type="button" class="secondary" data-close-modal>Abbrechen</button>
+        <button type="submit" class="primary">Speichern</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Zusatzkosten -->
+<div class="modal" id="modal-cost" hidden>
+  <div class="modal-card">
+    <header><h2>Kosten erfassen</h2><button class="close" data-close-modal><i class="ti ti-x"></i></button></header>
+    <form id="form-cost" autocomplete="off">
+      <label>Beschreibung<div class="voice-wrap"><input type="text" name="name" required placeholder="z. B. Versandtaschen, Klebeband, eBay-Gebühr"><button type="button" class="voice-btn" title="Spracheingabe"><i class="ti ti-microphone"></i></button></div></label>
+      <label>Betrag (€)<input type="number" name="amount" step="0.01" min="0" required inputmode="decimal" placeholder="0,00"></label>
+      <label>Datum<input type="date" name="date"></label>
+      <label>Kategorie <span style="color:var(--text-tertiary);font-weight:400">(optional)</span><input type="text" name="kategorie" list="cost-kat-list" placeholder="z. B. Verpackung, Versand"></label>
+      <div class="modal-actions">
+        <button type="button" class="secondary" data-close-modal>Abbrechen</button>
+        <button type="submit" class="primary">Speichern</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Verkaufen -->
+<div class="modal" id="modal-sell" hidden>
+  <div class="modal-card">
+    <header><h2>Als verkauft markieren</h2><button class="close" data-close-modal><i class="ti ti-x"></i></button></header>
+    <div class="item-name-display" id="sell-item-name"></div>
+    <div class="price-suggest">
+      <div class="price-suggest-label">Schnell ausfüllen — Preisvorschlag:</div>
+      <div class="price-suggest-btns" id="price-suggest-btns"></div>
+    </div>
+    <form id="form-sell" autocomplete="off">
+      <label>Verkaufspreis (€)<input type="number" name="soldPrice" step="0.01" min="0" required inputmode="decimal" placeholder="0,00"></label>
+      <label>Versand, den du trägst (€)<input type="number" name="shippingCost" step="0.01" min="0" inputmode="decimal" value="0"></label>
+      <label>Verkauft am<input type="date" name="soldDate"></label>
+      <label>Verkauft auf <span style="color:var(--text-tertiary);font-weight:400">(optional)</span><input type="text" name="soldPlatform" list="platforms-list" placeholder="z. B. Vinted, Kleinanzeigen"></label>
+      <div class="profit-preview" id="profit-preview">Gewinn wird hier angezeigt, sobald du den Verkaufspreis einträgst.</div>
+      <div class="modal-actions">
+        <button type="button" class="secondary" data-close-modal>Abbrechen</button>
+        <button type="submit" class="primary">Verkauf eintragen</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Bearbeiten -->
+<div class="modal" id="modal-edit" hidden>
+  <div class="modal-card">
+    <header><h2>Artikel bearbeiten</h2><button class="close" data-close-modal><i class="ti ti-x"></i></button></header>
+    <form id="form-edit" autocomplete="off">
+      <div class="status-toggle" id="status-toggle">
+        <button type="button" class="status-btn" data-status="lager"><i class="ti ti-package"></i>Im Lager</button>
+        <button type="button" class="status-btn" data-status="verkauft"><i class="ti ti-coin"></i>Verkauft</button>
+      </div>
+      <label>Name<input type="text" name="name" required></label>
+      <label>Einkaufspreis (€)<input type="number" name="purchasePrice" step="0.01" min="0" required inputmode="decimal"></label>
+      <label>Eingekauft am<input type="date" name="purchaseDate"></label>
+      <label>Bezugsquelle <span style="color:var(--text-tertiary);font-weight:400">(optional)</span><input type="text" name="supplier" list="suppliers-list"></label>
+      <label>Kategorie <span style="color:var(--text-tertiary);font-weight:400">(optional)</span><input type="text" name="kategorie" list="kategorien-list"></label>
+      <div class="sold-fields" id="edit-sold-fields" hidden>
+        <label>Verkaufspreis (€)<input type="number" name="soldPrice" step="0.01" min="0" inputmode="decimal"></label>
+        <label>Versand, den du trägst (€)<input type="number" name="shippingCost" step="0.01" min="0" inputmode="decimal"></label>
+        <label>Verkauft am<input type="date" name="soldDate"></label>
+        <label>Verkauft auf <span style="color:var(--text-tertiary);font-weight:400">(optional)</span><input type="text" name="soldPlatform" list="platforms-list"></label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="danger" id="edit-delete-btn"><i class="ti ti-trash"></i> Löschen</button>
+        <button type="submit" class="primary">Speichern</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  const STORAGE_KEY='flipbuch_v1';
+  const THEME_KEY='flipbuch_theme';
+  const GOAL_KEY='flipbuch_goal';
+  const STALE_DAYS=30;
+  const STEUER_LIMIT=25000; // §19 UStG – ab 2025 (JStG 2024): 25.000 € Vorjahresumsatz
+  const STEUER_WARN=20000;
+  const DAC7_SALES=30;
+  const DAC7_REVENUE=2000;
+
+  let state={items:[],costs:[]};
+
+  function loadState(){
+    try{ const r=localStorage.getItem(STORAGE_KEY); if(r) state=JSON.parse(r); }
+    catch(e){}
+    if(!Array.isArray(state.items)) state.items=[];
+    if(!Array.isArray(state.costs)) state.costs=[];
+  }
+  function saveState(){ try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }catch(e){} }
+  function getGoal(){ return parseFloat(localStorage.getItem(GOAL_KEY))||0; }
+  function setGoal(v){ localStorage.setItem(GOAL_KEY,v); }
+
+  function getCurrentTheme(){ return localStorage.getItem(THEME_KEY)||'system'; }
+  function applyTheme(theme){
+    if(theme==='system'){ delete document.documentElement.dataset.theme; localStorage.removeItem(THEME_KEY); }
+    else{ document.documentElement.dataset.theme=theme; localStorage.setItem(THEME_KEY,theme); }
+    updateThemeButtons();
+  }
+  function updateThemeButtons(){
+    const cur=getCurrentTheme();
+    document.querySelectorAll('.theme-btn').forEach(b=>b.classList.toggle('active',b.dataset.theme===cur));
+  }
+
+  const eurFmt=new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'});
+  const eurFmtShort=new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+  const eur=v=>eurFmt.format(v||0);
+  const eurShort=v=>eurFmtShort.format(Math.round(v||0));
+  const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+  const today=()=>new Date().toISOString().slice(0,10);
+  const monthOf=d=>d?d.slice(0,7):null;
+  const currentMonth=()=>today().slice(0,7);
+  const monthsBack=n=>{ const d=new Date(); d.setDate(1); d.setMonth(d.getMonth()-n); return d.toISOString().slice(0,7); };
+  const MONTH_SHORT=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  const MONTH_FULL=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  const monthLabel=ym=>MONTH_SHORT[parseInt(ym.split('-')[1])-1];
+  const monthLabelFull=ym=>`${MONTH_FULL[parseInt(ym.split('-')[1])-1]} ${ym.split('-')[0]}`;
+  const escHTML=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmtDate=d=>d?new Date(d).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'}):'';
+
+  // Woche
+  function getMondayStr(dateStr){
+    const d=new Date(dateStr||today());
+    const day=d.getDay();
+    const diff=d.getDate()-day+(day===0?-6:1);
+    d.setDate(diff);
+    return d.toISOString().slice(0,10);
+  }
+  function weeksBack(n){
+    const d=new Date(getMondayStr(today()));
+    d.setDate(d.getDate()-n*7);
+    return d.toISOString().slice(0,10);
+  }
+  function weekEndStr(mondayStr){
+    const d=new Date(mondayStr); d.setDate(d.getDate()+6); return d.toISOString().slice(0,10);
+  }
+  function weekLabel(mondayStr){
+    const d=new Date(mondayStr);
+    return `${d.getDate()}.${d.getMonth()+1}.`;
+  }
+
+  // Stats
+  function daysInLager(item){
+    if(!item.purchaseDate) return 0;
+    return Math.floor((Date.now()-new Date(item.purchaseDate))/(86400000));
+  }
+  function itemProfit(item){
+    if(item.status!=='verkauft') return 0;
+    return (item.soldPrice||0)-(item.purchasePrice||0)-(item.shippingCost||0);
+  }
+  function costsForMonth(ym){
+    return state.costs.filter(c=>monthOf(c.date)===ym).reduce((s,c)=>s+(c.amount||0),0);
+  }
+  function costsTotal(){
+    return state.costs.reduce((s,c)=>s+(c.amount||0),0);
+  }
+  function statsForMonth(ym){
+    const sold=state.items.filter(i=>i.status==='verkauft'&&monthOf(i.soldDate)===ym);
+    const grossProfit=sold.reduce((s,i)=>s+itemProfit(i),0);
+    return{
+      profit:grossProfit-costsForMonth(ym),
+      revenue:sold.reduce((s,i)=>s+(i.soldPrice||0),0),
+      count:sold.length
+    };
+  }
+  function statsForWeek(mondayStr){
+    const endStr=weekEndStr(mondayStr);
+    const sold=state.items.filter(i=>i.status==='verkauft'&&i.soldDate&&i.soldDate>=mondayStr&&i.soldDate<=endStr);
+    const costs=state.costs.filter(c=>c.date&&c.date>=mondayStr&&c.date<=endStr);
+    return{ profit: sold.reduce((s,i)=>s+itemProfit(i),0)-costs.reduce((s,c)=>s+(c.amount||0),0) };
+  }
+  function statsForDay(dateStr){
+    const sold=state.items.filter(i=>i.status==='verkauft'&&i.soldDate===dateStr);
+    const costs=state.costs.filter(c=>c.date===dateStr);
+    return{ profit: sold.reduce((s,i)=>s+itemProfit(i),0)-costs.reduce((s,c)=>s+(c.amount||0),0) };
+  }
+  function daysBackStr(n){
+    const d=new Date(); d.setDate(d.getDate()-n); return d.toISOString().slice(0,10);
+  }
+  function dayLabel(dateStr){
+    const d=new Date(dateStr); return `${d.getDate()}.${d.getMonth()+1}.`;
+  }
+  function statsTotal(){
+    const sold=state.items.filter(i=>i.status==='verkauft');
+    return{
+      profit:sold.reduce((s,i)=>s+itemProfit(i),0)-costsTotal(),
+      revenue:sold.reduce((s,i)=>s+(i.soldPrice||0),0),
+      count:sold.length
+    };
+  }
+  function lagerStats(){
+    const l=state.items.filter(i=>i.status==='lager');
+    return{count:l.length,value:l.reduce((s,i)=>s+(i.purchasePrice||0),0)};
+  }
+  function currentYearRevenue(){
+    const yr=new Date().getFullYear().toString();
+    return state.items.filter(i=>i.status==='verkauft'&&i.soldDate&&i.soldDate.startsWith(yr)).reduce((s,i)=>s+(i.soldPrice||0),0);
+  }
+
+  // Suche & Sortierung
+  let searchQuery='', sortOrder='date-desc';
+
+  // Ø Verkaufsdauer
+  function avgSellDays(){
+    const sold=state.items.filter(i=>i.status==='verkauft'&&i.purchaseDate&&i.soldDate);
+    if(!sold.length) return null;
+    const total=sold.reduce((s,i)=>s+Math.max(0,Math.floor((new Date(i.soldDate)-new Date(i.purchaseDate))/86400000)),0);
+    return Math.round(total/sold.length);
+  }
+
+  // Steuer-CSV Export (ELSTER-kompatibel)
+  function formatCSVNum(n){ return(n||0).toFixed(2).replace('.',','); }
+  function exportElsterCSV(){
+    const yr=new Date().getFullYear().toString();
+    const sold=state.items.filter(i=>i.status==='verkauft'&&i.soldDate&&i.soldDate.startsWith(yr)).sort((a,b)=>(a.soldDate||'').localeCompare(b.soldDate||''));
+    const lines=['﻿']; // BOM für Excel-Kompatibilität
+    lines.push('Steuer-Export FlipBuch v1.1 — Jahr '+yr);
+    lines.push('');
+    lines.push('Verkäufe');
+    lines.push('Datum;Beschreibung;Verkaufserlös;Einkaufskosten;Versandkosten;Gewinn;Plattform;Kategorie');
+    let totRev=0,totPur=0,totSh=0,totPro=0;
+    sold.forEach(i=>{
+      const rev=i.soldPrice||0,pur=i.purchasePrice||0,sh=i.shippingCost||0,pro=rev-pur-sh;
+      totRev+=rev;totPur+=pur;totSh+=sh;totPro+=pro;
+      lines.push([i.soldDate,'"'+(i.name||'').replace(/"/g,'""')+'"',formatCSVNum(rev),formatCSVNum(pur),formatCSVNum(sh),formatCSVNum(pro),'"'+(i.soldPlatform||'').replace(/"/g,'""')+'"','"'+(i.kategorie||'').replace(/"/g,'""')+'"'].join(';'));
+    });
+    lines.push(['','Gesamt',formatCSVNum(totRev),formatCSVNum(totPur),formatCSVNum(totSh),formatCSVNum(totPro),'',''].join(';'));
+    lines.push('');
+    const costs=state.costs.filter(c=>c.date&&c.date.startsWith(yr)).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+    lines.push('Zusatzkosten');
+    lines.push('Datum;Beschreibung;Betrag;Kategorie');
+    let totCosts=0;
+    costs.forEach(c=>{
+      totCosts+=c.amount||0;
+      lines.push([(c.date||''),'"'+(c.name||'').replace(/"/g,'""')+'"',formatCSVNum(c.amount),'"'+(c.kategorie||'').replace(/"/g,'""')+'"'].join(';'));
+    });
+    lines.push(['','Gesamt',formatCSVNum(totCosts),''].join(';'));
+    lines.push('');
+    lines.push('Zusammenfassung');
+    lines.push('Umsatz;'+formatCSVNum(totRev));
+    lines.push('Einkaufskosten;'+formatCSVNum(totPur));
+    lines.push('Versandkosten;'+formatCSVNum(totSh));
+    lines.push('Zusatzkosten;'+formatCSVNum(totCosts));
+    lines.push('Nettogewinn;'+formatCSVNum(totPro-totCosts));
+    const blob=new Blob([lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=`flipbuch-steuer-${yr}.csv`;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+    showToast('Steuer-CSV exportiert','ti-file-invoice');
+  }
+
+  // Preisvorschlag
+  const MARGINS=[{label:'Break-even',pct:0},{label:'+20 %',pct:0.2},{label:'+50 %',pct:0.5},{label:'+100 %',pct:1.0}];
+  function populatePriceSuggest(purchasePrice){
+    const wrap=document.getElementById('price-suggest-btns');
+    wrap.innerHTML=MARGINS.map(m=>{
+      const price=purchasePrice*(1+m.pct);
+      return`<button type="button" class="price-btn" data-price="${price.toFixed(2)}">${m.label}<span>${eur(price)}</span></button>`;
+    }).join('');
+  }
+
+  // Toast
+  let toastTimer=null;
+  function showToast(msg,icon){
+    const t=document.getElementById('toast');
+    t.innerHTML=`<i class="ti ${icon||'ti-check'}"></i> ${escHTML(msg)}`;
+    t.hidden=false; void t.offsetWidth; t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>{t.hidden=true;},300);},2400);
+  }
+
+  function uniqueValues(field,arr){
+    const s=new Set();
+    (arr||state.items).forEach(i=>{const v=(i[field]||'').trim();if(v)s.add(v);});
+    return Array.from(s).sort((a,b)=>a.localeCompare(b,'de'));
+  }
+  function updateDatalists(){
+    document.getElementById('suppliers-list').innerHTML=uniqueValues('supplier').map(v=>`<option value="${escHTML(v)}"></option>`).join('');
+    document.getElementById('kategorien-list').innerHTML=uniqueValues('kategorie').map(v=>`<option value="${escHTML(v)}"></option>`).join('');
+  }
+
+  // Donut
+  let donutField='supplier';
+  const DONUT_COLORS=['var(--seg1)','var(--seg2)','var(--seg3)','var(--seg4)','var(--seg5)','var(--seg-other)'];
+  function groupByField(field){
+    const groups=new Map(); let untagged=0,untaggedCount=0;
+    state.items.filter(i=>i.status==='verkauft').forEach(i=>{
+      const profit=itemProfit(i); if(profit<=0) return;
+      const v=(i[field]||'').trim();
+      if(!v){untagged+=profit;untaggedCount++;return;}
+      const cur=groups.get(v)||{label:v,value:0,count:0};
+      cur.value+=profit;cur.count++;groups.set(v,cur);
+    });
+    const arr=Array.from(groups.values()).sort((a,b)=>b.value-a.value);
+    let display=arr;
+    if(arr.length>5){
+      const top=arr.slice(0,4),rest=arr.slice(4);
+      display=[...top,{label:'Andere',value:rest.reduce((s,x)=>s+x.value,0),count:rest.reduce((s,x)=>s+x.count,0),isOther:true}];
+    }
+    return{display,untagged,untaggedCount,totalTagged:arr.reduce((s,x)=>s+x.value,0)};
+  }
+  function donutPath(cx,cy,rO,rI,a1,a2){
+    const xo1=cx+rO*Math.cos(a1),yo1=cy+rO*Math.sin(a1);
+    const xo2=cx+rO*Math.cos(a2),yo2=cy+rO*Math.sin(a2);
+    const xi2=cx+rI*Math.cos(a2),yi2=cy+rI*Math.sin(a2);
+    const xi1=cx+rI*Math.cos(a1),yi1=cy+rI*Math.sin(a1);
+    return`M ${xo1} ${yo1} A ${rO} ${rO} 0 ${(a2-a1)>Math.PI?1:0} 1 ${xo2} ${yo2} L ${xi2} ${yi2} A ${rI} ${rI} 0 ${(a2-a1)>Math.PI?1:0} 0 ${xi1} ${yi1} Z`;
+  }
+  function renderDonut(){
+    const{display,untagged,untaggedCount,totalTagged}=groupByField(donutField);
+    const fieldNames={supplier:'Bezugsquelle',kategorie:'Kategorie',soldPlatform:'Plattform'};
+    const wrap=document.getElementById('donut-wrap'),empty=document.getElementById('donut-empty');
+    if(!display.length||totalTagged<=0){
+      wrap.hidden=true;empty.hidden=false;document.getElementById('donut-note').hidden=true;
+      document.getElementById('donut-empty-text').textContent=`Trag bei deinen verkauften Artikeln eine ${fieldNames[donutField]||donutField} ein.`;
+      return;
+    }
+    wrap.hidden=false;empty.hidden=true;
+    let angle=-Math.PI/2;
+    const paths=[];
+    display.forEach((d,idx)=>{
+      const seg=(d.value/totalTagged)*2*Math.PI,endAngle=angle+seg;
+      const gap=display.length>1?0.018:0;
+      const color=d.isOther?DONUT_COLORS[5]:DONUT_COLORS[Math.min(idx,4)];
+      paths.push(`<path d="${donutPath(90,90,78,50,angle+(idx===0?0:gap/2),endAngle-gap/2)}" fill="${color}"></path>`);
+      angle=endAngle;
+    });
+    document.getElementById('donut-svg').innerHTML=paths.join('');
+    document.getElementById('donut-center-value').textContent=eurShort(totalTagged);
+    document.getElementById('donut-legend').innerHTML=display.map((d,idx)=>{
+      const pct=Math.round((d.value/totalTagged)*100);
+      const color=d.isOther?DONUT_COLORS[5]:DONUT_COLORS[Math.min(idx,4)];
+      return`<div class="legend-row"><span class="legend-dot" style="background:${color}"></span><span class="legend-name">${escHTML(d.label)}</span><span class="legend-pct">${pct}%</span><span class="legend-value">${eur(d.value)}</span></div>`;
+    }).join('');
+    const note=document.getElementById('donut-note');
+    if(untaggedCount>0){note.hidden=false;note.textContent=`${untaggedCount} Artikel ohne ${fieldNames[donutField]||donutField} (${eur(untagged)}) — nicht im Diagramm.`;}
+    else{note.hidden=true;}
+  }
+
+  function renderTopItems(){
+    const sold=state.items.filter(i=>i.status==='verkauft').map(i=>({item:i,profit:itemProfit(i)})).filter(x=>x.profit>0).sort((a,b)=>b.profit-a.profit).slice(0,5);
+    const list=document.getElementById('top-list'),empty=document.getElementById('top-empty');
+    if(!sold.length){list.innerHTML='';empty.hidden=false;return;}
+    empty.hidden=true;
+    const max=sold[0].profit;
+    list.innerHTML=sold.map((x,idx)=>`<div class="top-row-item" style="--bar-pct:${Math.max((x.profit/max)*100,18)}%"><div class="top-rank">${idx+1}</div><div class="top-name">${escHTML(x.item.name)}</div><div class="top-profit">+${eur(x.profit)}</div></div>`).join('');
+  }
+
+  // Chart-Modus: 'auto' = automatisch je nach Datendichte, sonst manuell
+  let chartMode='auto';
+
+  function autoPick(){
+    // Schaut auf ALLE Verkäufe (kein Zeitfenster), wählt die Ansicht die am wenigsten leer ist
+    const allSold=state.items.filter(i=>i.status==='verkauft'&&i.soldDate);
+    if(!allSold.length) return 'tag';
+    const lastDate=allSold.map(i=>i.soldDate).sort().pop();
+    // Verschiedene Kalendermonate?
+    const uniqMonths=new Set(allSold.map(i=>i.soldDate.slice(0,7))).size;
+    if(uniqMonths>=2){
+      // Letzter Verkauf noch im 6-Monats-Fenster? → Monat, sonst Jahr
+      return monthOf(lastDate)>=monthsBack(5)?'monat':'jahr';
+    }
+    // Verschiedene Wochen?
+    const uniqWeeks=new Set(allSold.map(i=>getMondayStr(i.soldDate))).size;
+    if(uniqWeeks>=2){
+      // Im 8-Wochen-Fenster? → Woche, sonst Monat
+      return lastDate>=weeksBack(7)?'woche':'monat';
+    }
+    // Alles in einer Woche → täglich, aber nur wenn im 7-Tage-Fenster
+    return lastDate>=daysBackStr(6)?'tag':'woche';
+  }
+
+  function setChartTabActive(mode){
+    document.querySelectorAll('.chart-tab').forEach(t=>t.classList.toggle('active',t.dataset.chartMode===mode));
+  }
+
+  // Dashboard Säulendiagramm mit 4 Stufen
+  function renderDashChart(){
+    const row=document.getElementById('dash-chart-row');
+    const empty=document.getElementById('dash-chart-empty');
+    const titleEl=document.getElementById('dash-chart-title');
+
+    const allSold=state.items.filter(i=>i.status==='verkauft'&&i.soldDate);
+    if(!allSold.length){
+      row.innerHTML='';row.hidden=true;empty.hidden=false;
+      setChartTabActive('tag');return;
+    }
+    row.hidden=false;empty.hidden=true;
+
+    const effective=chartMode==='auto'?autoPick():chartMode;
+    setChartTabActive(effective);
+
+    let labels,profits,dense=false;
+
+    if(effective==='tag'){
+      const days=[]; for(let i=6;i>=0;i--) days.push(daysBackStr(i));
+      titleEl.textContent='Tagesbilanz';
+      labels=days.map(d=>dayLabel(d));
+      profits=days.map(d=>statsForDay(d).profit);
+    } else if(effective==='woche'){
+      const weeks=[]; for(let i=7;i>=0;i--) weeks.push(weeksBack(i));
+      titleEl.textContent='Wochenbilanz';
+      labels=weeks.map(w=>weekLabel(w));
+      profits=weeks.map(w=>statsForWeek(w).profit);
+    } else if(effective==='monat'){
+      const yms=[]; for(let i=5;i>=0;i--) yms.push(monthsBack(i));
+      titleEl.textContent='Monatsbilanz';
+      labels=yms.map(ym=>monthLabel(ym));
+      profits=yms.map(ym=>statsForMonth(ym).profit);
+    } else {
+      // Jahr: letzte 12 Monate
+      dense=true;
+      const yms=[]; for(let i=11;i>=0;i--) yms.push(monthsBack(i));
+      titleEl.textContent='Jahresbilanz';
+      labels=yms.map(ym=>monthLabel(ym));
+      profits=yms.map(ym=>statsForMonth(ym).profit);
+    }
+
+    row.className='chart-row'+(dense?' chart-row--dense':'');
+    const maxAbs=Math.max(...profits.map(p=>Math.abs(p)),0.01);
+    const activeIdx=profits.length-1;
+    const MAX_PX=112; // Pixelhöhen – 140px Container, ~28px für Label+Gap
+    row.innerHTML='';
+    profits.forEach((profit,idx)=>{
+      const hasData=Math.abs(profit)>0.001;
+      const px=hasData?Math.max(Math.round((Math.abs(profit)/maxAbs)*MAX_PX),10):2;
+      const bar=document.createElement('div');
+      bar.className='bar'+(idx===activeIdx?' active':'')+(profit<0?' negative':'');
+      const fillStyle=hasData
+        ?`height:${px}px`
+        :`height:2px;background:var(--border);border-radius:2px;min-height:0`;
+      bar.innerHTML=`<div class="bar-fill" style="${fillStyle}"></div><span class="bar-label">${escHTML(labels[idx])}</span>`;
+      row.appendChild(bar);
+    });
+  }
+
+  // Analyse Charts
+  function renderAnalyseCharts(){
+    const yms=[]; for(let i=5;i>=0;i--) yms.push(monthsBack(i));
+    const profits=yms.map(ym=>statsForMonth(ym).profit);
+    const row=document.getElementById('chart-row'),chartEmpty=document.getElementById('chart-empty');
+    if(profits.filter(p=>p!==0).length<2){row.innerHTML='';row.hidden=true;chartEmpty.hidden=false;}
+    else{
+      row.hidden=false;chartEmpty.hidden=true;row.innerHTML='';
+      const maxP=Math.max(...profits.map(p=>Math.abs(p)),0.01);
+      const MAX_BIG=90;
+      yms.forEach((ym,idx)=>{
+        const p=profits[idx];
+        const hasData=Math.abs(p)>0.001;
+        const px=hasData?Math.max(Math.round((Math.abs(p)/maxP)*MAX_BIG),10):2;
+        const bar=document.createElement('div');
+        bar.className='bar-big'+(idx===yms.length-1?' active':'')+(p<0?' negative':'');
+        const fillStyle=hasData?`height:${px}px`:`height:2px;background:var(--border);border-radius:2px;min-height:0`;
+        bar.innerHTML=`<div class="bar-fill-big" style="${fillStyle}"></div><span class="bar-label-big">${monthLabel(ym)}</span>`;
+        row.appendChild(bar);
+      });
+    }
+    renderDonut();renderTopItems();renderSourceAnalysis();
+  }
+  function openAnalyse(title){
+    document.getElementById('analyse-view-title').textContent=title;
+    switchView('analyse');renderAnalyseCharts();
+  }
+
+  // ── Wegweiser: Kleinunternehmergrenze ──────────────────────────────
+  const STEUER_STEPS_KEY='flipbuch_steuer_done';
+  const WEGWEISER_STEPS=[
+    {id:'eltern',    icon:'ti-users',         title:'Elternteil informieren',
+     desc:'Erkläre deinem Elternteil oder deiner erziehungsberechtigten Person die Situation und bitte um Unterstützung – du brauchst sie als gesetzlichen Vertreter.'},
+    {id:'steuerberater',icon:'ti-briefcase',  title:'Steuerberater aufsuchen',
+     desc:'Ein Steuerberater erklärt euch genau was zu tun ist. Viele bieten ein kostenloses Erstgespräch an. Dein Elternteil kommt mit.'},
+    {id:'gewerbe',   icon:'ti-building-store',title:'Gewerbe anmelden',
+     desc:'Falls noch nicht geschehen: Gewerbeanmeldung beim Gewerbeamt deiner Stadt (ca. 20–30 €). Als Minderjähriger unterschreibt dein Elternteil.'},
+    {id:'finanzamt', icon:'ti-landmark',      title:'Beim Finanzamt melden',
+     desc:'Den „Fragebogen zur steuerlichen Erfassung" ausfüllen und ans Finanzamt schicken – am einfachsten über elster.de. Gemeinsam mit Elternteil erledigen.'},
+    {id:'ust',       icon:'ti-receipt-tax',   title:'Umsatzsteuer ausweisen',
+     desc:'Ab jetzt müssen auf Verkäufe 19 % Umsatzsteuer aufgeschlagen und auf Rechnungen ausgewiesen werden. Plattformen wie Vinted haben eigene Regelungen – unbedingt nachfragen.'},
+    {id:'belege',    icon:'ti-file-invoice',  title:'Alle Belege aufbewahren',
+     desc:'Kauf- & Verkaufsbelege, Portobelege, Plattform-Abrechnungen – alles 10 Jahre aufbewahren. Am besten direkt einscannen.'},
+    {id:'voranmeldung',icon:'ti-calendar-due',title:'Umsatzsteuervoranmeldung',
+     desc:'Quartalsweise oder monatlich beim Finanzamt einreichen – ausschließlich elektronisch über ELSTER (elster.de). Steuerberater hilft beim ersten Mal.'},
+  ];
+
+  function getStepsDone(){ try{return JSON.parse(localStorage.getItem(STEUER_STEPS_KEY))||[];}catch(e){return[];} }
+  function toggleStep(id){
+    const done=getStepsDone(),idx=done.indexOf(id);
+    if(idx>=0) done.splice(idx,1); else done.push(id);
+    localStorage.setItem(STEUER_STEPS_KEY,JSON.stringify(done));
+    renderProfile();
+  }
+
+  function renderWegweiser(){
+    const revenue=currentYearRevenue(),pct=(revenue/STEUER_LIMIT)*100;
+    const done=getStepsDone();
+
+    let badgeClass,badgeText,intro;
+    if(pct>=100){
+      badgeClass='crossed';badgeText='⚠️ Grenze überschritten';
+      intro='Du hast die 25.000 €-Grenze überschritten! Bitte sofort mit einem Elternteil und einem Steuerberater sprechen – alle Schritte unten sind jetzt wichtig.';
+    } else if(pct>=90){
+      badgeClass='urgent';badgeText='🔴 Jetzt handeln';
+      intro=`Noch ${eur(STEUER_LIMIT-revenue)} bis zur Grenze. Sprich sofort mit deinem Elternteil und beginne mit den Schritten unten.`;
+    } else if(pct>=75){
+      badgeClass='prepare';badgeText='🟡 Vorbereiten';
+      intro=`Du hast ${Math.round(pct)} % der Grenze erreicht. Kein Stress – aber es ist Zeit, sich vorzubereiten. Schritt 1 & 2 jetzt angehen!`;
+    } else {
+      badgeClass='safe';badgeText='✅ Noch Zeit';
+      intro='Du bist noch weit von der Grenze entfernt. Hier ist dein Fahrplan für den Fall, dass es ernst wird – lies ihn einmal durch.';
+    }
+
+    const stepsHtml=WEGWEISER_STEPS.map((s,i)=>{
+      const isDone=done.includes(s.id);
+      const isUrgent=!isDone&&pct>=90;
+      const isActive=!isDone&&pct>=75&&i<3;
+      const cls=isDone?'step-done':(isUrgent?'step-urgent':(isActive?'step-active':''));
+      const circleInner=isDone?`<i class="ti ti-check" style="font-size:13px"></i>`:(i+1);
+      const btnLabel=isDone?`<i class="ti ti-check"></i> Erledigt`:`Als erledigt markieren`;
+      return`<div class="step-item ${cls}">
+        <div class="step-circle">${circleInner}</div>
+        <div class="step-body">
+          <div class="step-title">${s.title}</div>
+          <div class="step-desc">${s.desc}</div>
+          <div class="step-action"><button class="step-check-btn" data-step="${s.id}">${btnLabel}</button></div>
+        </div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('wegweiser-card').innerHTML=`
+      <span class="wegweiser-badge ${badgeClass}">${badgeText}</span>
+      <p class="wegweiser-intro">${intro}</p>
+      <div class="step-list">${stepsHtml}</div>
+      <div class="wegweiser-disclaimer"><strong>Hinweis:</strong> Dies ist eine vereinfachte Orientierungshilfe, kein Rechtsrat. Für rechtssichere Beratung bitte einen Steuerberater hinzuziehen. Als Minderjähriger benötigst du immer die Unterstützung eines Erziehungsberechtigten.</div>`;
+  }
+
+  // Zuletzt verkauft
+
+  // Monatsziel
+  function renderGoal(){
+    const goal=getGoal(),card=document.getElementById('goal-card');
+    if(!goal){card.hidden=true;return;}
+    card.hidden=false;
+    const profit=statsForMonth(currentMonth()).profit;
+    const pct=Math.min((profit/goal)*100,100),done=profit>=goal;
+    document.getElementById('goal-nums').textContent=`${eurShort(profit)} / ${eurShort(goal)}`;
+    const fill=document.getElementById('goal-fill');
+    fill.style.width=pct+'%';
+    fill.classList.toggle('done',done);
+    document.getElementById('goal-sub').textContent=done?'🎉 Ziel erreicht!':`Noch ${eur(goal-profit)} bis zum Ziel`;
+  }
+
+  // Steuer
+  function renderSteuerTracker(){
+    const revenue=currentYearRevenue();
+    const pct=Math.min((revenue/STEUER_LIMIT)*100,100);
+    document.getElementById('steuer-amount').textContent=eur(revenue);
+    const fill=document.getElementById('steuer-fill');
+    fill.style.width=pct+'%';
+    fill.className='steuer-fill '+(revenue>=STEUER_LIMIT?'danger':revenue>=STEUER_WARN?'warn':'safe');
+    const warn=document.getElementById('steuer-warning');
+    const remaining=STEUER_LIMIT-revenue;
+    if(revenue>=STEUER_LIMIT){warn.hidden=false;document.getElementById('steuer-warning-text').textContent='Du hast die Kleinunternehmer-Grenze überschritten! Bitte mit einem Elternteil sprechen.';}
+    else if(revenue>=STEUER_WARN){warn.hidden=false;document.getElementById('steuer-warning-text').textContent=`Noch ${eur(remaining)} bis zur Grenze. Bald mit einem Elternteil besprechen.`;}
+    else{warn.hidden=true;}
+    document.getElementById('steuer-note').textContent=`Kleinunternehmer-Grenze (ab 2025): 25.000 € / Jahr · noch ${eur(remaining)} frei`;
+  }
+
+  // DAC7 Meldegrenze
+  function renderDac7(){
+    const card=document.getElementById('dac7-card');
+    const yr=new Date().getFullYear().toString();
+    const sold=state.items.filter(i=>i.status==='verkauft'&&i.soldDate&&i.soldDate.startsWith(yr));
+    if(!sold.length){card.hidden=true;return;}
+    card.hidden=false;
+    const count=sold.length;
+    const revenue=sold.reduce((s,i)=>s+(i.soldPrice||0),0);
+    const sPct=Math.min((count/DAC7_SALES)*100,100);
+    const rPct=Math.min((revenue/DAC7_REVENUE)*100,100);
+    const cls=p=>p>=100?'danger':p>=67?'warn':'safe';
+    document.getElementById('dac7-sales-fill').style.width=sPct+'%';
+    document.getElementById('dac7-sales-fill').className='dac7-fill '+cls(sPct);
+    document.getElementById('dac7-sales-val').textContent=`${count} / ${DAC7_SALES}`;
+    document.getElementById('dac7-rev-fill').style.width=rPct+'%';
+    document.getElementById('dac7-rev-fill').className='dac7-fill '+cls(rPct);
+    document.getElementById('dac7-rev-val').textContent=`${eur(revenue)} / ${eur(DAC7_REVENUE)}`;
+    const note=document.getElementById('dac7-note');
+    if(count>DAC7_SALES||revenue>DAC7_REVENUE){
+      note.className='dac7-note alert';
+      note.textContent='⚠️ Vinted meldet deine Daten ans Finanzamt und fragt nach deiner Steuer-ID. Bitte sofort mit einem Elternteil besprechen.';
+    } else {
+      note.className='dac7-note';
+      note.textContent='Ab mehr als 30 Verkäufen ODER mehr als 2.000 € Umsatz/Jahr meldet Vinted deine Daten ans Finanzamt (DAC7 / PStTG).';
+    }
+  }
+
+  // Einkaufsquellen-Auswertung
+  function renderSourceAnalysis(){
+    const list=document.getElementById('source-list'),empty=document.getElementById('source-empty');
+    const sold=state.items.filter(i=>i.status==='verkauft'&&(i.supplier||'').trim());
+    if(!sold.length){list.innerHTML='';empty.hidden=false;return;}
+    empty.hidden=true;
+    const groups=new Map();
+    sold.forEach(i=>{
+      const s=(i.supplier||'').trim();
+      const cur=groups.get(s)||{label:s,profit:0,invested:0,count:0};
+      cur.profit+=itemProfit(i);cur.invested+=(i.purchasePrice||0);cur.count++;groups.set(s,cur);
+    });
+    const arr=Array.from(groups.values())
+      .map(g=>({...g,roi:g.invested>0?Math.round((g.profit/g.invested)*100):0}))
+      .sort((a,b)=>b.roi-a.roi);
+    const maxRoi=Math.max(...arr.map(g=>Math.abs(g.roi)),1);
+    list.innerHTML=arr.map((g,idx)=>`<div class="top-row-item" style="--bar-pct:${Math.max((Math.abs(g.roi)/maxRoi)*100,12)}%"><div class="top-rank">${idx+1}</div><div class="top-name">${escHTML(g.label)}</div><div style="display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;gap:1px"><div class="top-profit">${g.roi>=0?'+':''}${g.roi}%</div><div style="font-size:10px;color:var(--text-tertiary)">${eur(g.profit)} · ${g.count}×</div></div></div>`).join('');
+  }
+
+  // Dashboard
+  function renderDashboard(){
+    const cm=currentMonth(),pm=monthsBack(1);
+    const m=statsForMonth(cm),prev=statsForMonth(pm),total=statsTotal(),lager=lagerStats();
+    document.querySelector('.dash-month').textContent=monthLabelFull(cm);
+    document.getElementById('hero-profit').textContent=eur(m.profit);
+    document.getElementById('hero-total').textContent=`Gesamt ${eur(total.profit)}`;
+    const trendEl=document.getElementById('hero-trend');
+    if(prev.profit!==0){
+      const pct=prev.profit!==0?Math.round(((m.profit-prev.profit)/Math.abs(prev.profit))*100):0,up=pct>=0;
+      trendEl.className='trend '+(up?'up':'down');
+      trendEl.innerHTML=`<i class="ti ti-trending-${up?'up':'down'}"></i> ${up?'+':''}${pct}% vs. ${monthLabel(pm)}`;
+    } else if(m.profit>0){
+      trendEl.className='trend up';trendEl.innerHTML=`<i class="ti ti-trending-up"></i> erster Gewinn!`;
+    } else{trendEl.className='trend neutral';trendEl.textContent='noch keine Verkäufe';}
+    document.getElementById('tile-revenue-month').textContent=eurShort(m.revenue);
+    document.getElementById('tile-revenue-total').textContent=`Gesamt ${eurShort(total.revenue)}`;
+    document.getElementById('tile-sold-month').textContent=m.count;
+    document.getElementById('tile-sold-total').textContent=`Gesamt ${total.count}`;
+    document.getElementById('tile-lager-value').textContent=eurShort(lager.value);
+    document.getElementById('tile-lager-count').textContent=`${lager.count} Artikel`;
+    document.getElementById('welcome').hidden=state.items.length>0||state.costs.length>0;
+    renderGoal();
+    renderDac7();
+    renderDashChart();
+  }
+
+  // Items & Kosten
+  function renderItems(){
+    const activeTab=document.querySelector('.filter-tabs .active');
+    const filter=activeTab?activeTab.dataset.filter:'lager';
+    document.getElementById('count-lager').textContent=state.items.filter(i=>i.status==='lager').length;
+    document.getElementById('count-verkauft').textContent=state.items.filter(i=>i.status==='verkauft').length;
+    document.getElementById('count-kosten').textContent=state.costs.length;
+    document.getElementById('search-clear').hidden=!searchQuery;
+    const list=document.getElementById('item-list');
+    list.innerHTML='';
+    const q=searchQuery.toLowerCase();
+
+    if(filter==='kosten'){
+      let costs=[...state.costs];
+      if(q) costs=costs.filter(c=>(c.name||'').toLowerCase().includes(q)||(c.kategorie||'').toLowerCase().includes(q));
+      costs.sort((a,b)=>{
+        if(sortOrder==='date-asc') return (a.date||'').localeCompare(b.date||'');
+        if(sortOrder==='val-desc') return (b.amount||0)-(a.amount||0);
+        if(sortOrder==='val-asc') return (a.amount||0)-(b.amount||0);
+        return (b.date||'').localeCompare(a.date||'');
+      });
+      if(!costs.length){
+        list.innerHTML=q?`<div class="empty"><i class="ti ti-search"></i><p>Nichts für „${escHTML(searchQuery)}" gefunden.</p></div>`:`<div class="empty"><i class="ti ti-receipt"></i><p>Noch keine Kosten erfasst. Tippe auf + und wähle „Zusatzkosten".</p></div>`;
+        return;
+      }
+      costs.forEach(cost=>{
+        const card=document.createElement('div');
+        card.className='cost-card';
+        const katChip=cost.kategorie?`<div class="item-chips"><span class="chip chip--cost"><i class="ti ti-tag"></i>${escHTML(cost.kategorie)}</span></div>`:'';
+        card.innerHTML=`<div class="item-main"><div class="item-name">${escHTML(cost.name)}</div><div class="item-meta">${cost.date?fmtDate(cost.date):''}</div>${katChip}</div><div class="item-side"><div class="profit negative">−${eur(cost.amount)}</div><button class="action-del" data-cost-id="${cost.id}"><i class="ti ti-trash"></i></button></div>`;
+        list.appendChild(card);
+      });
+      return;
+    }
+
+    let items=state.items.filter(i=>i.status===filter);
+    if(q) items=items.filter(i=>(i.name||'').toLowerCase().includes(q)||(i.supplier||'').toLowerCase().includes(q)||(i.kategorie||'').toLowerCase().includes(q)||(i.soldPlatform||'').toLowerCase().includes(q));
+    if(!items.length){
+      list.innerHTML=q?`<div class="empty"><i class="ti ti-search"></i><p>Nichts für „${escHTML(searchQuery)}" gefunden.</p></div>`:`<div class="empty"><i class="ti ti-package"></i><p>${filter==='lager'?'Kein Artikel im Lager.':'Noch nichts verkauft.'}</p></div>`;
+      return;
+    }
+    const dateKey=filter==='lager'?'purchaseDate':'soldDate';
+    items.sort((a,b)=>{
+      if(sortOrder==='date-asc') return (a[dateKey]||'').localeCompare(b[dateKey]||'');
+      if(sortOrder==='val-desc') return filter==='lager'?(b.purchasePrice||0)-(a.purchasePrice||0):itemProfit(b)-itemProfit(a);
+      if(sortOrder==='val-asc') return filter==='lager'?(a.purchasePrice||0)-(b.purchasePrice||0):itemProfit(a)-itemProfit(b);
+      return (b[dateKey]||'').localeCompare(a[dateKey]||'');
+    });
+    items.forEach(item=>{
+      const card=document.createElement('div');
+      const days=daysInLager(item),isStale=item.status==='lager'&&days>=STALE_DAYS;
+      card.className='item-card'+(isStale?' item-card--stale':'');
+      card.dataset.id=item.id;
+      const chips=[];
+      if(item.supplier) chips.push(`<span class="chip"><i class="ti ti-tag"></i>${escHTML(item.supplier)}</span>`);
+      if(item.kategorie) chips.push(`<span class="chip"><i class="ti ti-hanger"></i>${escHTML(item.kategorie)}</span>`);
+      if(isStale) chips.push(`<span class="chip chip--warn"><i class="ti ti-clock"></i>${days} Tage</span>`);
+      if(item.soldPlatform) chips.push(`<span class="chip"><i class="ti ti-device-mobile"></i>${escHTML(item.soldPlatform)}</span>`);
+      const chipsHtml=chips.length?`<div class="item-chips">${chips.join('')}</div>`:'';
+      if(item.status==='lager'){
+        card.innerHTML=`<div class="item-main"><div class="item-name">${escHTML(item.name)}</div><div class="item-meta">Eingekauft ${eur(item.purchasePrice)}${item.purchaseDate?` · ${fmtDate(item.purchaseDate)}`:''}</div>${chipsHtml}</div><div class="item-actions"><button class="action-sell" data-id="${item.id}"><i class="ti ti-check"></i> Verkauft</button><button class="action-del" data-id="${item.id}"><i class="ti ti-trash"></i></button></div>`;
+      }else{
+        const profit=itemProfit(item),cls=profit>=0?'positive':'negative';
+        card.innerHTML=`<div class="item-main"><div class="item-name">${escHTML(item.name)}</div><div class="item-meta">${eur(item.purchasePrice)} → ${eur(item.soldPrice)}${item.shippingCost?` · Versand ${eur(item.shippingCost)}`:''}${item.soldDate?` · ${fmtDate(item.soldDate)}`:''}</div>${chipsHtml}</div><div class="item-side"><div class="profit ${cls}">${profit>=0?'+':''}${eur(profit)}</div><button class="action-del" data-id="${item.id}"><i class="ti ti-trash"></i></button></div>`;
+      }
+      list.appendChild(card);
+    });
+  }
+
+  function renderProfile(){
+    const total=statsTotal(),lager=lagerStats(),totalCosts=costsTotal(),avg=avgSellDays();
+    document.getElementById('profile-stats').innerHTML=`
+      <div class="stat-row"><span>Verkäufe gesamt</span><strong>${total.count}</strong></div>
+      <div class="stat-row"><span>Umsatz gesamt</span><strong>${eur(total.revenue)}</strong></div>
+      <div class="stat-row"><span>Zusatzkosten gesamt</span><strong style="color:var(--negative)">−${eur(totalCosts)}</strong></div>
+      <div class="stat-row"><span>Nettogewinn gesamt</span><strong>${eur(total.profit)}</strong></div>
+      <div class="stat-row"><span>Im Lager</span><strong>${lager.count} Artikel · ${eur(lager.value)}</strong></div>
+      ${avg!==null?`<div class="stat-row"><span>Ø Verkaufsdauer</span><strong>${avg} Tage</strong></div>`:''}`;
+    updateThemeButtons();renderSteuerTracker();renderWegweiser();
+    const g=getGoal(); if(g) document.getElementById('goal-input').value=g;
+  }
+
+  function rerender(){ saveState();updateDatalists();renderDashboard();renderItems();renderProfile(); }
+
+  // Views
+  function switchView(name,opts){
+    opts=opts||{};
+    document.querySelectorAll('[data-view]').forEach(v=>v.hidden=v.dataset.view!==name);
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(n=>n.classList.toggle('active',n.dataset.nav===name&&!n.dataset.filter));
+    if(name==='items'&&opts.filter){
+      document.querySelectorAll('.filter-tabs .tab').forEach(t=>t.classList.toggle('active',t.dataset.filter===opts.filter));
+      renderItems();
+    }
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  function openModal(id){document.getElementById(id).hidden=false;}
+  function closeModal(id){document.getElementById(id).hidden=true;}
+
+  // Sell flow
+  let sellingItemId=null;
+  function openSellModal(itemId){
+    const item=state.items.find(i=>i.id===itemId);if(!item)return;
+    sellingItemId=itemId;
+    document.getElementById('sell-item-name').textContent=item.name;
+    populatePriceSuggest(item.purchasePrice||0);
+    document.querySelectorAll('.price-btn').forEach(b=>b.classList.remove('selected'));
+    const f=document.getElementById('form-sell');
+    f.soldPrice.value='';f.shippingCost.value='0';f.soldDate.value=today();f.soldPlatform.value='';
+    updateProfitPreview();openModal('modal-sell');setTimeout(()=>f.soldPrice.focus(),100);
+  }
+  function updateProfitPreview(){
+    const item=state.items.find(i=>i.id===sellingItemId);
+    const el=document.getElementById('profit-preview');
+    if(!item){el.innerHTML='';return;}
+    const f=document.getElementById('form-sell');
+    const sp=parseFloat(f.soldPrice.value)||0,sh=parseFloat(f.shippingCost.value)||0;
+    if(sp<=0){el.innerHTML='Gewinn wird hier angezeigt, sobald du den Verkaufspreis einträgst.';return;}
+    const profit=sp-item.purchasePrice-sh;
+    el.innerHTML=`Gewinn: <strong class="${profit>=0?'positive':'negative'}">${profit>=0?'+':''}${eur(profit)}</strong>`;
+  }
+
+  // Edit flow
+  let editingItemId=null,editStatus='lager';
+  function openEditModal(itemId){
+    const item=state.items.find(i=>i.id===itemId);if(!item)return;
+    editingItemId=itemId;editStatus=item.status;
+    const f=document.getElementById('form-edit');
+    f.name.value=item.name||'';f.purchasePrice.value=item.purchasePrice??'';
+    f.purchaseDate.value=item.purchaseDate||'';f.supplier.value=item.supplier||'';
+    f.kategorie.value=item.kategorie||'';f.soldPrice.value=item.soldPrice??'';
+    f.shippingCost.value=item.shippingCost??'';f.soldDate.value=item.soldDate||'';
+    f.soldPlatform.value=item.soldPlatform||'';
+    setEditStatus(item.status);openModal('modal-edit');
+  }
+  function setEditStatus(status){
+    editStatus=status;
+    document.querySelectorAll('#status-toggle .status-btn').forEach(b=>b.classList.toggle('active',b.dataset.status===status));
+    document.getElementById('edit-sold-fields').hidden=status!=='verkauft';
+  }
+
+  // Events
+  document.querySelectorAll('.bottom-nav .nav-item').forEach(btn=>{
+    btn.addEventListener('click',()=>switchView(btn.dataset.nav,{filter:btn.dataset.filter}));
+  });
+  document.getElementById('hero-card').addEventListener('click',()=>openAnalyse('Gewinn-Analyse'));
+  document.querySelectorAll('.tile[data-analyse]').forEach(t=>t.addEventListener('click',()=>openAnalyse(t.dataset.analyse)));
+  document.getElementById('analyse-back').addEventListener('click',()=>switchView('dashboard'));
+
+  // + Action Sheet
+  document.getElementById('open-add-sheet').addEventListener('click',()=>openModal('modal-add-sheet'));
+  document.getElementById('open-add-item').addEventListener('click',()=>{
+    closeModal('modal-add-sheet');
+    const f=document.getElementById('form-add');f.reset();f.purchaseDate.value=today();
+    openModal('modal-add');setTimeout(()=>f.name.focus(),100);
+  });
+  document.getElementById('open-add-cost').addEventListener('click',()=>{
+    closeModal('modal-add-sheet');
+    const f=document.getElementById('form-cost');f.reset();f.date.value=today();
+    openModal('modal-cost');setTimeout(()=>f.name.focus(),100);
+  });
+
+  document.querySelectorAll('[data-close-modal]').forEach(b=>b.addEventListener('click',e=>{const m=e.target.closest('.modal');if(m)m.hidden=true;}));
+  document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.hidden=true;}));
+
+  // Artikel speichern
+  document.getElementById('form-add').addEventListener('submit',e=>{
+    e.preventDefault();const f=e.target;
+    const item={id:uid(),name:f.name.value.trim(),purchasePrice:parseFloat(f.purchasePrice.value)||0,purchaseDate:f.purchaseDate.value||today(),supplier:(f.supplier.value||'').trim(),kategorie:(f.kategorie.value||'').trim(),status:'lager'};
+    if(!item.name)return;
+    state.items.push(item);rerender();closeModal('modal-add');showToast('Artikel gespeichert','ti-check');
+  });
+
+  // Kosten speichern
+  document.getElementById('form-cost').addEventListener('submit',e=>{
+    e.preventDefault();const f=e.target;
+    const cost={id:uid(),name:f.name.value.trim(),amount:parseFloat(f.amount.value)||0,date:f.date.value||today(),kategorie:(f.kategorie.value||'').trim()};
+    if(!cost.name||cost.amount<=0)return;
+    state.costs.push(cost);rerender();closeModal('modal-cost');
+    showToast(`−${eur(cost.amount)} Kosten erfasst`,'ti-receipt');
+  });
+
+  // Verkauf
+  document.getElementById('form-sell').addEventListener('submit',e=>{
+    e.preventDefault();const f=e.target;
+    const item=state.items.find(i=>i.id===sellingItemId);if(!item)return;
+    item.soldPrice=parseFloat(f.soldPrice.value)||0;item.shippingCost=parseFloat(f.shippingCost.value)||0;
+    item.soldDate=f.soldDate.value||today();item.soldPlatform=(f.soldPlatform.value||'').trim();
+    item.status='verkauft';
+    const profit=itemProfit(item);
+    rerender();closeModal('modal-sell');sellingItemId=null;
+    showToast(profit>=0?`+${eur(profit)} verdient!`:`${eur(profit)} (Verlust)`,profit>=0?'ti-trending-up':'ti-trending-down');
+  });
+  document.querySelectorAll('#form-sell input[name="soldPrice"],#form-sell input[name="shippingCost"]').forEach(inp=>inp.addEventListener('input',updateProfitPreview));
+
+  document.getElementById('status-toggle').addEventListener('click',e=>{const b=e.target.closest('.status-btn');if(b)setEditStatus(b.dataset.status);});
+  document.getElementById('form-edit').addEventListener('submit',e=>{
+    e.preventDefault();const f=e.target;
+    const item=state.items.find(i=>i.id===editingItemId);if(!item||!f.name.value.trim())return;
+    item.name=f.name.value.trim();item.purchasePrice=parseFloat(f.purchasePrice.value)||0;
+    item.purchaseDate=f.purchaseDate.value||item.purchaseDate||today();
+    item.supplier=(f.supplier.value||'').trim();item.kategorie=(f.kategorie.value||'').trim();
+    if(editStatus==='verkauft'){
+      item.soldPrice=parseFloat(f.soldPrice.value)||0;item.shippingCost=parseFloat(f.shippingCost.value)||0;
+      item.soldDate=f.soldDate.value||item.soldDate||today();item.status='verkauft';
+      item.soldPlatform=(f.soldPlatform.value||'').trim();
+    }else{item.soldPrice=null;item.shippingCost=null;item.soldDate=null;item.soldPlatform=null;item.status='lager';}
+    rerender();closeModal('modal-edit');editingItemId=null;showToast('Änderungen gespeichert','ti-check');
+  });
+  document.getElementById('edit-delete-btn').addEventListener('click',()=>{
+    const item=state.items.find(i=>i.id===editingItemId);if(!item)return;
+    if(confirm(`„${item.name}" wirklich löschen?`)){
+      state.items=state.items.filter(i=>i.id!==editingItemId);
+      rerender();closeModal('modal-edit');editingItemId=null;showToast('Gelöscht','ti-trash');
+    }
+  });
+
+  // Item-Liste (delegiert)
+  document.getElementById('item-list').addEventListener('click',e=>{
+    const sell=e.target.closest('.action-sell');
+    if(sell){e.stopPropagation();openSellModal(sell.dataset.id);return;}
+    const del=e.target.closest('.action-del');
+    if(del){
+      e.stopPropagation();
+      if(del.dataset.costId){
+        if(confirm('Kosten-Eintrag löschen?')){state.costs=state.costs.filter(c=>c.id!==del.dataset.costId);rerender();}
+      }else{
+        const item=state.items.find(i=>i.id===del.dataset.id);
+        if(item&&confirm(`„${item.name}" wirklich löschen?`)){state.items=state.items.filter(i=>i.id!==del.dataset.id);rerender();}
+      }
+      return;
+    }
+    const card=e.target.closest('.item-card');if(card&&!e.target.closest('a'))openEditModal(card.dataset.id);
+  });
+
+  document.querySelectorAll('.filter-tabs .tab').forEach(t=>t.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-tabs .tab').forEach(tt=>tt.classList.toggle('active',tt===t));renderItems();
+  }));
+  // Suche
+  document.getElementById('item-search').addEventListener('input',e=>{
+    searchQuery=e.target.value;renderItems();
+  });
+  document.getElementById('search-clear').addEventListener('click',()=>{
+    searchQuery='';document.getElementById('item-search').value='';renderItems();
+  });
+  document.getElementById('sort-select').addEventListener('change',e=>{
+    sortOrder=e.target.value;renderItems();
+  });
+
+  // Preisvorschlag
+  document.getElementById('price-suggest-btns').addEventListener('click',e=>{
+    const btn=e.target.closest('.price-btn');if(!btn)return;
+    const price=btn.dataset.price;
+    document.querySelector('#form-sell [name="soldPrice"]').value=parseFloat(price).toFixed(2);
+    document.querySelectorAll('.price-btn').forEach(b=>b.classList.toggle('selected',b===btn));
+    updateProfitPreview();
+  });
+
+  // Import
+  document.getElementById('import-btn').addEventListener('click',()=>document.getElementById('import-input').click());
+  document.getElementById('import-input').addEventListener('change',e=>{
+    const file=e.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const imp=JSON.parse(ev.target.result);
+        if(!Array.isArray(imp.items)) throw new Error('Kein gültiger FlipBuch-Export.');
+        if(confirm(`${imp.items.length} Artikel und ${(imp.costs||[]).length} Kosten importieren?\nBestehende Daten werden überschrieben.`)){
+          state={items:imp.items,costs:imp.costs||[]};
+          rerender();showToast('Import erfolgreich','ti-upload');
+        }
+      }catch(err){alert('Fehler beim Import: '+err.message);}
+      e.target.value='';
+    };
+    reader.readAsText(file);
+  });
+
+  // PWA Install Prompt
+  let installPrompt=null;
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault();installPrompt=e;
+    document.getElementById('install-btn').hidden=false;
+  });
+  document.getElementById('install-btn').addEventListener('click',async()=>{
+    if(!installPrompt)return;
+    installPrompt.prompt();
+    const{outcome}=await installPrompt.userChoice;
+    if(outcome==='accepted'){showToast('FlipBuch installiert!','ti-device-mobile');installPrompt=null;document.getElementById('install-btn').hidden=true;}
+  });
+
+  document.getElementById('chart-tabs').addEventListener('click',e=>{
+    const b=e.target.closest('.chart-tab');if(!b)return;
+    chartMode=b.dataset.chartMode;
+    renderDashChart();
+  });
+  document.getElementById('donut-tabs').addEventListener('click',e=>{
+    const b=e.target.closest('.donut-tab');if(!b)return;
+    donutField=b.dataset.field;
+    document.querySelectorAll('.donut-tab').forEach(t=>t.classList.toggle('active',t===b));renderDonut();
+  });
+  document.getElementById('wegweiser-card').addEventListener('click',e=>{
+    const b=e.target.closest('.step-check-btn');if(!b)return;
+    toggleStep(b.dataset.step);
+  });
+  document.getElementById('theme-toggle').addEventListener('click',e=>{const b=e.target.closest('.theme-btn');if(b)applyTheme(b.dataset.theme);});
+  document.getElementById('goal-save-btn').addEventListener('click',()=>{
+    const val=parseFloat(document.getElementById('goal-input').value)||0;
+    setGoal(val);rerender();showToast(val>0?`Ziel: ${eur(val)} gespeichert`:'Ziel entfernt','ti-target');
+  });
+  document.getElementById('steuer-export-btn').addEventListener('click',exportElsterCSV);
+  document.getElementById('export-btn').addEventListener('click',()=>{
+    const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=`flipbuch-export-${today()}.json`;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+    showToast('Export gestartet','ti-download');
+  });
+  document.getElementById('clear-btn').addEventListener('click',()=>{
+    if(confirm('Wirklich ALLE Daten löschen?')){ state={items:[],costs:[]};rerender();showToast('Alle Daten gelöscht','ti-trash'); }
+  });
+
+  // Spracheingabe
+  (function(){
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){ document.querySelectorAll('.voice-btn').forEach(b=>b.hidden=true); return; }
+    const rec=new SR();
+    rec.lang='de-DE';rec.interimResults=false;rec.maxAlternatives=1;
+    let activeInput=null,activeBtn=null;
+    rec.onresult=e=>{
+      if(activeInput){ activeInput.value=e.results[0][0].transcript; activeInput.dispatchEvent(new Event('input')); }
+    };
+    rec.onend=()=>{ if(activeBtn) activeBtn.classList.remove('recording'); };
+    rec.onerror=()=>{ if(activeBtn) activeBtn.classList.remove('recording'); };
+    document.querySelectorAll('.voice-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        activeInput=btn.closest('.voice-wrap').querySelector('input');
+        document.querySelectorAll('.voice-btn').forEach(b=>b.classList.remove('recording'));
+        activeBtn=btn; btn.classList.add('recording');
+        try{ rec.start(); }catch(e){ btn.classList.remove('recording'); }
+      });
+    });
+  })();
+
+  loadState();rerender();
+})();
+</script>
+<script>
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+    });
+  }
+</script>
+</body>
+</html>
