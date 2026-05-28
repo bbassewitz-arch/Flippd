@@ -30,5 +30,28 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/dashboard.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Dashboard mit Gewinnübersicht"
+    },
+    {
+      "src": "screenshots/artikel.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Artikel & Lager verwalten"
+    },
+    {
+      "src": "screenshots/verkaeufe.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Verkäufe & Gewinnübersicht"
+    }
   ]
 }
