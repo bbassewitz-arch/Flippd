@@ -1,6 +1,6 @@
 {
-  "name": "FlipBuch — Vinted Tracker",
-  "short_name": "FlipBuch",
+  "name": "Flippd — Vinted Tracker",
+  "short_name": "Flippd",
   "description": "Verfolge deine Vinted-Verkäufe, berechne Gewinne und behalte Steuer-Grenzen im Blick. Kostenlos, ohne Account, alles lokal auf deinem Gerät.",
   "start_url": "./",
   "scope": "./",
