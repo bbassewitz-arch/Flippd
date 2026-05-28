@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "name": "Flippd — Vinted Tracker",
   "short_name": "Flippd",
   "description": "Verfolge deine Vinted-Verkäufe, berechne Gewinne und behalte Steuer-Grenzen im Blick. Kostenlos, ohne Account, alles lokal auf deinem Gerät.",
@@ -28,22 +29,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "screenshots/dashboard.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Dashboard mit Gewinnübersicht"
-    },
-    {
-      "src": "screenshots/artikel.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Artikel & Verkäufe verwalten"
     }
   ]
 }
