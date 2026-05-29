@@ -415,6 +415,32 @@ label input::placeholder{color:var(--text-tertiary)}
 .dac7-note{font-size:11px;color:var(--text-tertiary);margin-top:10px;line-height:1.5}
 .dac7-note.alert{color:var(--warn)}
 
+/* ── Paywall ── */
+.paywall-box{background:var(--card);border-radius:24px 24px 0 0;padding:28px 20px max(40px,env(safe-area-inset-bottom));width:100%;max-width:440px;max-height:88vh;overflow-y:auto}
+.paywall-crown{width:60px;height:60px;background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 24px rgba(245,158,11,.35)}
+.paywall-crown i{font-size:30px;color:#fff}
+.paywall-title{font-size:22px;font-weight:700;color:var(--text);text-align:center;margin-bottom:6px}
+.paywall-sub{font-size:14px;color:var(--text-secondary);text-align:center;margin-bottom:22px;line-height:1.5}
+.paywall-features{list-style:none;padding:0;margin:0 0 22px;display:flex;flex-direction:column;gap:10px}
+.paywall-features li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text)}
+.paywall-features li i{color:var(--brand);font-size:18px;flex-shrink:0}
+.paywall-plans{display:flex;gap:10px;margin-bottom:18px}
+.plan-card{flex:1;border:2px solid var(--border);border-radius:16px;padding:16px 10px 12px;cursor:pointer;transition:border-color .2s,background .2s;position:relative;text-align:center}
+.plan-card.selected{border-color:var(--brand);background:var(--brand-pale,#ecfdf5)}
+.plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--brand);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.plan-name{font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.plan-price{font-size:24px;font-weight:700;color:var(--text);letter-spacing:-.02em}
+.plan-period{font-size:11px;color:var(--text-secondary);margin-top:1px}
+.plan-save{font-size:11px;color:var(--brand);font-weight:700;margin-top:4px}
+.paywall-btn{width:100%;padding:16px;background:var(--brand);color:#fff;border:0;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:14px;letter-spacing:-.01em}
+.paywall-code-row{text-align:center}
+.paywall-code-toggle{background:transparent;border:0;color:var(--text-secondary);font-size:13px;cursor:pointer;text-decoration:underline;padding:4px}
+.paywall-code-box{margin-top:12px;display:flex;gap:8px}
+.paywall-code-box input{flex:1;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;background:var(--bg);color:var(--text);outline:none}
+.paywall-code-box button{padding:11px 18px;background:var(--brand);color:#fff;border:0;border-radius:10px;font-weight:600;cursor:pointer;white-space:nowrap}
+.limit-bar{background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-size:13px;color:#92400e}
+.limit-bar i{font-size:16px;flex-shrink:0}
+.pro-badge{font-size:10px;font-weight:700;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:2px 7px;border-radius:999px;vertical-align:middle;margin-left:6px}
 </style>
 </head>
 <body>
@@ -666,11 +692,12 @@ label input::placeholder{color:var(--text-tertiary)}
       <h2>Was möchtest du erfassen?</h2>
       <button class="close" data-close-modal><i class="ti ti-x"></i></button>
     </header>
+    <div class="limit-bar" id="limit-bar" hidden><i class="ti ti-alert-triangle"></i><span id="limit-bar-text"></span></div>
     <button class="action-sheet-btn" id="open-add-item">
       <div class="action-sheet-icon green"><i class="ti ti-package"></i></div>
       <div class="action-sheet-text">
         <div class="action-sheet-title">Artikel</div>
-        <div class="action-sheet-sub">Ein- oder Verkauf erfassen</div>
+        <div class="action-sheet-sub" id="add-item-sub">Ein- oder Verkauf erfassen</div>
       </div>
     </button>
     <button class="action-sheet-btn" id="open-add-cost">
@@ -680,6 +707,43 @@ label input::placeholder{color:var(--text-tertiary)}
         <div class="action-sheet-sub">Versandtaschen, Gebühren, Material …</div>
       </div>
     </button>
+  </div>
+</div>
+
+<!-- Modal: Paywall -->
+<div class="modal" id="modal-paywall" hidden>
+  <div class="paywall-box">
+    <div class="paywall-crown"><i class="ti ti-crown"></i></div>
+    <div class="paywall-title">Flippd Pro</div>
+    <div class="paywall-sub">Du hast das kostenlose Limit von 15 Artikeln erreicht.<br>Upgrade für unbegrenztes Tracking.</div>
+    <ul class="paywall-features">
+      <li><i class="ti ti-infinity"></i> Unbegrenzte Artikel &amp; Kosten</li>
+      <li><i class="ti ti-file-invoice"></i> CSV-Export für die Steuer</li>
+      <li><i class="ti ti-chart-bar"></i> Vollständige Gewinnanalyse</li>
+      <li><i class="ti ti-shield-check"></i> Kein Account · alle Daten lokal</li>
+    </ul>
+    <div class="paywall-plans">
+      <div class="plan-card" id="plan-monthly">
+        <div class="plan-name">Monatlich</div>
+        <div class="plan-price">4,99 €</div>
+        <div class="plan-period">pro Monat</div>
+      </div>
+      <div class="plan-card selected" id="plan-yearly">
+        <div class="plan-badge">⭐ Beliebteste Wahl</div>
+        <div class="plan-name">Jährlich</div>
+        <div class="plan-price">34,99 €</div>
+        <div class="plan-period">pro Jahr</div>
+        <div class="plan-save">Spare 40 %</div>
+      </div>
+    </div>
+    <button class="paywall-btn" id="paywall-upgrade-btn">Jetzt upgraden →</button>
+    <div class="paywall-code-row">
+      <button class="paywall-code-toggle" id="paywall-code-toggle">Bereits Pro? Lizenzcode eingeben</button>
+      <div class="paywall-code-box" id="paywall-code-box" hidden>
+        <input type="text" id="paywall-code-input" placeholder="FLIPPD-XXXX-XXXX" autocomplete="off">
+        <button id="paywall-code-submit">OK</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -774,6 +838,11 @@ label input::placeholder{color:var(--text-tertiary)}
   const STORAGE_KEY='flippd_v1';
   const THEME_KEY='flippd_theme';
   const GOAL_KEY='flippd_goal';
+  const PRO_KEY='flippd_pro';
+  const FREE_LIMIT=15;
+  // ↓ Stripe-Links hier eintragen sobald eingerichtet
+  const MONTHLY_URL='https://buy.stripe.com/PLACEHOLDER_MONTHLY';
+  const YEARLY_URL='https://buy.stripe.com/PLACEHOLDER_YEARLY';
   const STALE_DAYS=30;
   const STEUER_LIMIT=25000; // §19 UStG – ab 2025 (JStG 2024): 25.000 € Vorjahresumsatz
   const STEUER_WARN=20000;
@@ -1421,6 +1490,51 @@ label input::placeholder{color:var(--text-tertiary)}
     const g=getGoal(); if(g) document.getElementById('goal-input').value=g;
   }
 
+  // ── Pro / Paywall ──────────────────────────────────────────
+  function isProUser(){ return localStorage.getItem(PRO_KEY)==='true'; }
+
+  function activatePro(){
+    localStorage.setItem(PRO_KEY,'true');
+    closeModal('modal-paywall');
+    showToast('Flippd Pro aktiviert! 🎉','ti-crown');
+    renderDashboard();
+  }
+
+  function validateLicenseCode(raw){
+    // Einfache Prüfung: Code beginnt mit "FLIPPD-" und hat 15 Zeichen
+    // → nach Stripe-Setup: Server-Validierung via fetch
+    const c=raw.trim().toUpperCase().replace(/\s/g,'');
+    if(c.startsWith('FLIPPD-')&&c.length>=13) return true;
+    return false;
+  }
+
+  function checkLimit(){
+    if(isProUser()) return true;
+    if(state.items.length>=FREE_LIMIT){ openModal('modal-paywall'); return false; }
+    return true;
+  }
+
+  function updateLimitBar(){
+    const bar=document.getElementById('limit-bar');
+    const sub=document.getElementById('add-item-sub');
+    if(!bar) return;
+    if(isProUser()){ bar.hidden=true; if(sub) sub.textContent='Ein- oder Verkauf erfassen'; return; }
+    const remaining=FREE_LIMIT-state.items.length;
+    if(remaining<=3&&remaining>0){
+      bar.hidden=false;
+      document.getElementById('limit-bar-text').textContent=`Noch ${remaining} Artikel kostenlos — danach wird Pro benötigt.`;
+      if(sub) sub.textContent=`Noch ${remaining} von ${FREE_LIMIT} kostenlos`;
+    } else if(remaining<=0){
+      bar.hidden=false;
+      document.getElementById('limit-bar-text').textContent='Kostenloses Limit erreicht. Upgrade für mehr Artikel.';
+      if(sub) sub.textContent='Limit erreicht – Pro erforderlich';
+    } else {
+      bar.hidden=true;
+      if(sub) sub.textContent='Ein- oder Verkauf erfassen';
+    }
+  }
+  // ───────────────────────────────────────────────────────────
+
   function rerender(){ saveState();updateDatalists();renderDashboard();renderItems();renderProfile(); }
 
   // Views
@@ -1489,8 +1603,9 @@ label input::placeholder{color:var(--text-tertiary)}
   document.querySelectorAll('.tile[data-analyse]').forEach(t=>t.addEventListener('click',()=>openAnalyse(t.dataset.analyse)));
 
   // + Action Sheet
-  document.getElementById('open-add-sheet').addEventListener('click',()=>openModal('modal-add-sheet'));
+  document.getElementById('open-add-sheet').addEventListener('click',()=>{ updateLimitBar(); openModal('modal-add-sheet'); });
   document.getElementById('open-add-item').addEventListener('click',()=>{
+    if(!checkLimit()) return;
     closeModal('modal-add-sheet');
     const f=document.getElementById('form-add');f.reset();f.purchaseDate.value=today();
     openModal('modal-add');setTimeout(()=>f.name.focus(),100);
@@ -1504,9 +1619,37 @@ label input::placeholder{color:var(--text-tertiary)}
   document.querySelectorAll('[data-close-modal]').forEach(b=>b.addEventListener('click',e=>{const m=e.target.closest('.modal');if(m)m.hidden=true;}));
   document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.hidden=true;}));
 
+  // Paywall Events
+  let selectedPlan='yearly';
+  document.getElementById('plan-monthly').addEventListener('click',()=>{
+    selectedPlan='monthly';
+    document.getElementById('plan-monthly').classList.add('selected');
+    document.getElementById('plan-yearly').classList.remove('selected');
+  });
+  document.getElementById('plan-yearly').addEventListener('click',()=>{
+    selectedPlan='yearly';
+    document.getElementById('plan-yearly').classList.add('selected');
+    document.getElementById('plan-monthly').classList.remove('selected');
+  });
+  document.getElementById('paywall-upgrade-btn').addEventListener('click',()=>{
+    window.open(selectedPlan==='yearly'?YEARLY_URL:MONTHLY_URL,'_blank');
+  });
+  document.getElementById('paywall-code-toggle').addEventListener('click',()=>{
+    const box=document.getElementById('paywall-code-box');
+    box.hidden=!box.hidden;
+    if(!box.hidden) setTimeout(()=>document.getElementById('paywall-code-input').focus(),80);
+  });
+  document.getElementById('paywall-code-submit').addEventListener('click',()=>{
+    const code=document.getElementById('paywall-code-input').value;
+    if(validateLicenseCode(code)){ activatePro(); }
+    else { showToast('Ungültiger Lizenzcode','ti-x'); }
+  });
+  document.getElementById('paywall-code-input').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('paywall-code-submit').click(); });
+
   // Artikel speichern
   document.getElementById('form-add').addEventListener('submit',e=>{
     e.preventDefault();const f=e.target;
+    if(!isProUser()&&state.items.length>=FREE_LIMIT){ closeModal('modal-add'); openModal('modal-paywall'); return; }
     const item={id:uid(),name:f.name.value.trim(),purchasePrice:parseFloat(f.purchasePrice.value)||0,purchaseDate:f.purchaseDate.value||today(),supplier:(f.supplier.value||'').trim(),kategorie:(f.kategorie.value||'').trim(),status:'lager'};
     if(!item.name)return;
     state.items.push(item);rerender();closeModal('modal-add');showToast('Artikel gespeichert','ti-check');
