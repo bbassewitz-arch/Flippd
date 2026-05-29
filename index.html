@@ -437,7 +437,6 @@ label input::placeholder{color:var(--text-tertiary)}
         <span class="trend neutral" id="hero-trend">noch keine Verkäufe</span>
         <span class="gesamt" id="hero-total">Gesamt 0,00 €</span>
       </div>
-      <div class="hero-tap-hint"><i class="ti ti-chart-dots"></i> Detailanalyse öffnen</div>
     </div>
     <div class="goal-card" id="goal-card" hidden>
       <div class="goal-head">
@@ -1487,7 +1486,6 @@ label input::placeholder{color:var(--text-tertiary)}
       else { switchView(btn.dataset.nav,{filter:btn.dataset.filter}); }
     });
   });
-  document.getElementById('hero-card').addEventListener('click',()=>openAnalyse('Gewinn-Analyse'));
   document.querySelectorAll('.tile[data-analyse]').forEach(t=>t.addEventListener('click',()=>openAnalyse(t.dataset.analyse)));
 
   // + Action Sheet
