@@ -511,8 +511,7 @@ label input::placeholder{color:var(--text-tertiary)}
   <!-- Analyse -->
   <section data-view="analyse" hidden>
     <div class="analyse-header">
-      <button class="analyse-back" id="analyse-back"><i class="ti ti-arrow-left"></i></button>
-      <span class="analyse-view-title" id="analyse-view-title">Analyse</span>
+      <span class="analyse-view-title" id="analyse-view-title">Gewinn-Analyse</span>
     </div>
     <div class="chart-card">
       <div class="chart-title">Gewinn der letzten 6 Monate</div>
@@ -644,7 +643,7 @@ label input::placeholder{color:var(--text-tertiary)}
     <button class="nav-item active" data-nav="dashboard"><i class="ti ti-layout-dashboard"></i>Übersicht</button>
     <button class="nav-item" data-nav="items"><i class="ti ti-package"></i>Artikel</button>
     <button class="add-btn" id="open-add-sheet" aria-label="Neu"><i class="ti ti-plus"></i></button>
-    <button class="nav-item" data-nav="items" data-filter="verkauft"><i class="ti ti-coin"></i>Verkäufe</button>
+    <button class="nav-item" data-nav="analyse"><i class="ti ti-chart-bar"></i>Analyse</button>
     <button class="nav-item" data-nav="profile"><i class="ti ti-user"></i>Profil</button>
   </nav>
 </main>
@@ -1429,7 +1428,7 @@ label input::placeholder{color:var(--text-tertiary)}
   function switchView(name,opts){
     opts=opts||{};
     document.querySelectorAll('[data-view]').forEach(v=>v.hidden=v.dataset.view!==name);
-    document.querySelectorAll('.bottom-nav .nav-item').forEach(n=>n.classList.toggle('active',n.dataset.nav===name&&!n.dataset.filter));
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(n=>n.classList.toggle('active',n.dataset.nav===name));
     if(name==='items'&&opts.filter){
       document.querySelectorAll('.filter-tabs .tab').forEach(t=>t.classList.toggle('active',t.dataset.filter===opts.filter));
       renderItems();
@@ -1483,11 +1482,13 @@ label input::placeholder{color:var(--text-tertiary)}
 
   // Events
   document.querySelectorAll('.bottom-nav .nav-item').forEach(btn=>{
-    btn.addEventListener('click',()=>switchView(btn.dataset.nav,{filter:btn.dataset.filter}));
+    btn.addEventListener('click',()=>{
+      if(btn.dataset.nav==='analyse'){ openAnalyse('Gewinn-Analyse'); }
+      else { switchView(btn.dataset.nav,{filter:btn.dataset.filter}); }
+    });
   });
   document.getElementById('hero-card').addEventListener('click',()=>openAnalyse('Gewinn-Analyse'));
   document.querySelectorAll('.tile[data-analyse]').forEach(t=>t.addEventListener('click',()=>openAnalyse(t.dataset.analyse)));
-  document.getElementById('analyse-back').addEventListener('click',()=>switchView('dashboard'));
 
   // + Action Sheet
   document.getElementById('open-add-sheet').addEventListener('click',()=>openModal('modal-add-sheet'));
