@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CS89Y6C06F"></script>
 <script>
@@ -894,6 +895,29 @@ label input::placeholder{color:var(--text-tertiary)}
   const monthLabel=ym=>MONTH_SHORT[parseInt(ym.split('-')[1])-1];
   const monthLabelFull=ym=>`${MONTH_FULL[parseInt(ym.split('-')[1])-1]} ${ym.split('-')[0]}`;
   const escHTML=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  // ── Sanitisierung importierter Daten (Schutz vor manipulierten JSON-Dateien) ──
+  const cleanStr=v=>(typeof v==='string'?v:(v==null?'':String(v))).slice(0,200);
+  const cleanNum=v=>{const n=parseFloat(v);return isFinite(n)?n:0;};
+  const cleanDate=v=>(typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v))?v:null;
+  function sanitizeItem(raw){
+    if(!raw||typeof raw!=='object') return null;
+    const name=cleanStr(raw.name).trim();
+    if(!name) return null;
+    const status=raw.status==='verkauft'?'verkauft':'lager';
+    const item={id:uid(),name,purchasePrice:cleanNum(raw.purchasePrice),purchaseDate:cleanDate(raw.purchaseDate),supplier:cleanStr(raw.supplier).trim(),kategorie:cleanStr(raw.kategorie).trim(),status};
+    if(status==='verkauft'){
+      item.soldPrice=cleanNum(raw.soldPrice);item.shippingCost=cleanNum(raw.shippingCost);
+      item.soldDate=cleanDate(raw.soldDate);item.soldPlatform=cleanStr(raw.soldPlatform).trim();
+    }
+    return item;
+  }
+  function sanitizeCost(raw){
+    if(!raw||typeof raw!=='object') return null;
+    const name=cleanStr(raw.name).trim();
+    if(!name) return null;
+    return{id:uid(),name,amount:cleanNum(raw.amount),date:cleanDate(raw.date),kategorie:cleanStr(raw.kategorie).trim()};
+  }
   const fmtDate=d=>d?new Date(d).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'}):'';
 
   // Woche
@@ -1445,7 +1469,7 @@ label input::placeholder{color:var(--text-tertiary)}
         const card=document.createElement('div');
         card.className='cost-card';
         const katChip=cost.kategorie?`<div class="item-chips"><span class="chip chip--cost"><i class="ti ti-tag"></i>${escHTML(cost.kategorie)}</span></div>`:'';
-        card.innerHTML=`<div class="item-main"><div class="item-name">${escHTML(cost.name)}</div><div class="item-meta">${cost.date?fmtDate(cost.date):''}</div>${katChip}</div><div class="item-side"><div class="profit negative">−${eur(cost.amount)}</div><button class="action-del" data-cost-id="${cost.id}"><i class="ti ti-trash"></i></button></div>`;
+        card.innerHTML=`<div class="item-main"><div class="item-name">${escHTML(cost.name)}</div><div class="item-meta">${cost.date?fmtDate(cost.date):''}</div>${katChip}</div><div class="item-side"><div class="profit negative">−${eur(cost.amount)}</div><button class="action-del" data-cost-id="${escHTML(cost.id)}"><i class="ti ti-trash"></i></button></div>`;
         list.appendChild(card);
       });
       return;
@@ -1476,10 +1500,10 @@ label input::placeholder{color:var(--text-tertiary)}
       if(item.soldPlatform) chips.push(`<span class="chip"><i class="ti ti-device-mobile"></i>${escHTML(item.soldPlatform)}</span>`);
       const chipsHtml=chips.length?`<div class="item-chips">${chips.join('')}</div>`:'';
       if(item.status==='lager'){
-        card.innerHTML=`<div class="item-main"><div class="item-name">${escHTML(item.name)}</div><div class="item-meta">Eingekauft ${eur(item.purchasePrice)}${item.purchaseDate?` · ${fmtDate(item.purchaseDate)}`:''}</div>${chipsHtml}</div><div class="item-actions"><button class="action-sell" data-id="${item.id}"><i class="ti ti-check"></i> Verkauft</button><button class="action-del" data-id="${item.id}"><i class="ti ti-trash"></i></button></div>`;
+        card.innerHTML=`<div class="item-main"><div class="item-name">${escHTML(item.name)}</div><div class="item-meta">Eingekauft ${eur(item.purchasePrice)}${item.purchaseDate?` · ${fmtDate(item.purchaseDate)}`:''}</div>${chipsHtml}</div><div class="item-actions"><button class="action-sell" data-id="${escHTML(item.id)}"><i class="ti ti-check"></i> Verkauft</button><button class="action-del" data-id="${escHTML(item.id)}"><i class="ti ti-trash"></i></button></div>`;
       }else{
         const profit=itemProfit(item),cls=profit>=0?'positive':'negative';
-        card.innerHTML=`<div class="item-main"><div class="item-name">${escHTML(item.name)}</div><div class="item-meta">${eur(item.purchasePrice)} → ${eur(item.soldPrice)}${item.shippingCost?` · Versand ${eur(item.shippingCost)}`:''}${item.soldDate?` · ${fmtDate(item.soldDate)}`:''}</div>${chipsHtml}</div><div class="item-side"><div class="profit ${cls}">${profit>=0?'+':''}${eur(profit)}</div><button class="action-del" data-id="${item.id}"><i class="ti ti-trash"></i></button></div>`;
+        card.innerHTML=`<div class="item-main"><div class="item-name">${escHTML(item.name)}</div><div class="item-meta">${eur(item.purchasePrice)} → ${eur(item.soldPrice)}${item.shippingCost?` · Versand ${eur(item.shippingCost)}`:''}${item.soldDate?` · ${fmtDate(item.soldDate)}`:''}</div>${chipsHtml}</div><div class="item-side"><div class="profit ${cls}">${profit>=0?'+':''}${eur(profit)}</div><button class="action-del" data-id="${escHTML(item.id)}"><i class="ti ti-trash"></i></button></div>`;
       }
       list.appendChild(card);
     });
@@ -1640,7 +1664,7 @@ label input::placeholder{color:var(--text-tertiary)}
     document.getElementById('plan-monthly').classList.remove('selected');
   });
   document.getElementById('paywall-upgrade-btn').addEventListener('click',()=>{
-    window.open(selectedPlan==='yearly'?YEARLY_URL:MONTHLY_URL,'_blank');
+    window.open(selectedPlan==='yearly'?YEARLY_URL:MONTHLY_URL,'_blank','noopener,noreferrer');
   });
   document.getElementById('paywall-code-toggle').addEventListener('click',()=>{
     const box=document.getElementById('paywall-code-box');
@@ -1756,9 +1780,11 @@ label input::placeholder{color:var(--text-tertiary)}
     reader.onload=ev=>{
       try{
         const imp=JSON.parse(ev.target.result);
-        if(!Array.isArray(imp.items)) throw new Error('Kein gültiger Flippd-Export.');
-        if(confirm(`${imp.items.length} Artikel und ${(imp.costs||[]).length} Kosten importieren?\nBestehende Daten werden überschrieben.`)){
-          state={items:imp.items,costs:imp.costs||[]};
+        if(!imp||!Array.isArray(imp.items)) throw new Error('Kein gültiger Flippd-Export.');
+        const items=imp.items.map(sanitizeItem).filter(Boolean);
+        const costs=(Array.isArray(imp.costs)?imp.costs:[]).map(sanitizeCost).filter(Boolean);
+        if(confirm(`${items.length} Artikel und ${costs.length} Kosten importieren?\nBestehende Daten werden überschrieben.`)){
+          state={items,costs};
           rerender();showToast('Import erfolgreich','ti-upload');
         }
       }catch(err){alert('Fehler beim Import: '+err.message);}
