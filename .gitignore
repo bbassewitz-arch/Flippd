@@ -1,3 +1,8 @@
 .DS_Store
 node_modules/
 *.local
+
+# Persönlicher Projektkontext – niemals committen
+Reseller-tool.md
+*.md
+!privacy*.md

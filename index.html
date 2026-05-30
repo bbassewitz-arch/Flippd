@@ -2,17 +2,20 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#059669" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Flippd">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23059669'/%3E%3Ctext x='90' y='122' text-anchor='middle' fill='white' font-size='82' font-family='system-ui' font-weight='700'%3EFB%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23059669'/%3E%3Ctext x='90' y='128' text-anchor='middle' fill='white' font-size='100' font-family='system-ui' font-weight='700'%3EF%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
 <link rel="manifest" href="manifest.json">
 <title>Flippd — dein Vinted-Tracker</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.24.0/dist/tabler-icons.min.css">
+<meta name="description" content="Flippd — verfolge deine Vinted-Verkäufe, berechne Gewinne automatisch und behalte Steuer-Grenzen im Blick. Kostenlos, ohne Account, alle Daten lokal auf deinem Gerät.">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/tabler-icons.woff2" crossorigin>
+<link rel="stylesheet" href="assets/icons.css">
 <script>
   (function(){
     var t=localStorage.getItem('flippd_theme');
@@ -23,7 +26,7 @@
 :root{
   --bg:#F7F8FA;--card:#FFFFFF;--card-elevated:#FFFFFF;
   --border:rgba(15,23,42,0.08);--border-strong:rgba(15,23,42,0.14);
-  --text:#0F172A;--text-secondary:#475569;--text-tertiary:#94A3B8;
+  --text:#0F172A;--text-secondary:#475569;--text-tertiary:#6B7280;
   --brand:#059669;--brand-hover:#047857;--brand-tint:#ECFDF5;
   --brand-tint-strong:#D1FAE5;--brand-text:#065F46;--brand-bright:#10B981;
   --positive:#059669;--negative:#DC2626;--positive-bg:#ECFDF5;--negative-bg:#FEF2F2;
@@ -39,7 +42,7 @@
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0B1220;--card:#131D2E;--card-elevated:#1A2538;
   --border:rgba(255,255,255,0.07);--border-strong:rgba(255,255,255,0.14);
-  --text:#E2E8F0;--text-secondary:#94A3B8;--text-tertiary:#64748B;
+  --text:#E2E8F0;--text-secondary:#94A3B8;--text-tertiary:#8B97AB;
   --brand:#10B981;--brand-hover:#34D399;--brand-tint:rgba(16,185,129,0.10);
   --brand-tint-strong:rgba(16,185,129,0.20);--brand-text:#6EE7B7;
   --positive:#34D399;--negative:#F87171;--positive-bg:rgba(52,211,153,0.10);--negative-bg:rgba(248,113,113,0.10);
@@ -54,7 +57,7 @@
 :root[data-theme="dark"]{
   --bg:#0B1220;--card:#131D2E;--card-elevated:#1A2538;
   --border:rgba(255,255,255,0.07);--border-strong:rgba(255,255,255,0.14);
-  --text:#E2E8F0;--text-secondary:#94A3B8;--text-tertiary:#64748B;
+  --text:#E2E8F0;--text-secondary:#94A3B8;--text-tertiary:#8B97AB;
   --brand:#10B981;--brand-hover:#34D399;--brand-tint:rgba(16,185,129,0.10);
   --brand-tint-strong:rgba(16,185,129,0.20);--brand-text:#6EE7B7;
   --positive:#34D399;--negative:#F87171;--positive-bg:rgba(52,211,153,0.10);--negative-bg:rgba(248,113,113,0.10);
@@ -1265,7 +1268,7 @@ label input::placeholder{color:var(--text-tertiary)}
      desc:'Ein Steuerberater erklärt euch genau was zu tun ist. Viele bieten ein kostenloses Erstgespräch an. Dein Elternteil kommt mit.'},
     {id:'gewerbe',   icon:'ti-building-store',title:'Gewerbe anmelden',
      desc:'Falls noch nicht geschehen: Gewerbeanmeldung beim Gewerbeamt deiner Stadt (ca. 20–30 €). Als Minderjähriger unterschreibt dein Elternteil.'},
-    {id:'finanzamt', icon:'ti-landmark',      title:'Beim Finanzamt melden',
+    {id:'finanzamt', icon:'ti-building-estate', title:'Beim Finanzamt melden',
      desc:'Den „Fragebogen zur steuerlichen Erfassung" ausfüllen und ans Finanzamt schicken – am einfachsten über elster.de. Gemeinsam mit Elternteil erledigen.'},
     {id:'ust',       icon:'ti-receipt-tax',   title:'Umsatzsteuer ausweisen',
      desc:'Ab jetzt müssen auf Verkäufe 19 % Umsatzsteuer aufgeschlagen und auf Rechnungen ausgewiesen werden. Plattformen wie Vinted haben eigene Regelungen – unbedingt nachfragen.'},
