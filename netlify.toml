@@ -1,0 +1,18 @@
+# Flippd — Netlify-Konfiguration
+# Statische PWA, kein Build-Schritt nötig.
+
+[build]
+  publish = "."
+  command = ""
+
+# Sicherheits-Header kommen aus der Datei _headers (von Netlify nativ unterstützt).
+# Korrekte Content-Types sicherstellen:
+[[headers]]
+  for = "/service-worker.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Content-Type = "application/manifest+json"
