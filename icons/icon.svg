@@ -1,10 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Hintergrund -->
-  <rect width="512" height="512" rx="115" fill="#059669"/>
-  <!-- Grüner Glanz oben -->
-  <ellipse cx="256" cy="160" rx="220" ry="120" fill="rgba(52,211,153,0.18)"/>
-  <!-- FB Text -->
-  <text x="256" y="320" text-anchor="middle" fill="white"
-    font-size="220" font-family="-apple-system,BlinkMacSystemFont,Helvetica Neue,Arial,sans-serif"
-    font-weight="700" letter-spacing="-8">FB</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#0A3A2A"/>
+      <stop offset="1" stop-color="#04211A"/>
+    </linearGradient>
+    <radialGradient id="sheen" cx="0.5" cy="0.12" r="0.7">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="115" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="115" fill="url(#sheen)"/>
+  <!-- "f" Wortmarken-Buchstabe (Futura/Avenir, Fallback geometrisch) -->
+  <text x="248" y="356" text-anchor="middle" fill="#34D399"
+    font-size="330" font-family="Futura, 'Avenir Next', 'Helvetica Neue', Arial, sans-serif"
+    font-weight="600">f</text>
+  <!-- selbstbewusster Punkt -->
+  <circle cx="330" cy="330" r="22" fill="#34D399"/>
 </svg>
