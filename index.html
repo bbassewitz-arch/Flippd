@@ -255,6 +255,11 @@ button,input{font-family:inherit;color:inherit}
 .goal-setting label input{margin-top:8px;margin-bottom:10px}
 .goal-save-btn{width:100%;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:0;background:var(--brand);color:#fff;transition:background-color .15s,transform .15s}
 .goal-save-btn:active{background:var(--brand-hover);transform:scale(.98)}
+.pack-row{display:flex;gap:10px}.pack-row label{flex:1}
+.pack-info{font-size:13px;color:var(--text-secondary);margin-top:4px;font-weight:500}
+.pack-hint{font-size:12px;color:var(--text-tertiary);line-height:1.5;margin:4px 0 2px}
+.pack-skip-label{display:flex!important;flex-direction:row!important;align-items:center;gap:9px;cursor:pointer;font-size:13px!important;color:var(--text-secondary);background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:11px 12px}
+.pack-skip-label input{width:18px;height:18px;flex:0 0 auto;accent-color:var(--brand);margin:0}
 .steuer-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:6px}
 .steuer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .steuer-title{font-size:14px;font-weight:600;color:var(--text);display:inline-flex;align-items:center;gap:6px}
@@ -638,6 +643,27 @@ label input::placeholder{color:var(--text-tertiary)}
       </label>
       <button class="goal-save-btn" id="goal-save-btn"><i class="ti ti-check"></i> Ziel speichern</button>
     </div>
+    <h2 class="section-title">Verpackung pro Verkauf</h2>
+    <div class="goal-setting">
+      <div class="theme-toggle" id="pack-mode-toggle">
+        <button class="theme-btn" data-pmode="off"><i class="ti ti-ban"></i>Aus</button>
+        <button class="theme-btn" data-pmode="flat"><i class="ti ti-coin"></i>Pauschal</button>
+        <button class="theme-btn" data-pmode="material"><i class="ti ti-package"></i>Material</button>
+      </div>
+      <div id="pack-flat-box" hidden>
+        <label>Kosten pro Verkauf (€)<input type="number" id="pack-flat-input" step="0.01" min="0" placeholder="z. B. 0,30" inputmode="decimal"></label>
+      </div>
+      <div id="pack-material-box" hidden>
+        <label>Material<input type="text" id="pack-mat-name" placeholder="z. B. Versandtasche"></label>
+        <div class="pack-row">
+          <label>Gesamtpreis (€)<input type="number" id="pack-mat-total" step="0.01" min="0" placeholder="18" inputmode="decimal"></label>
+          <label>Menge (Stück)<input type="number" id="pack-mat-qty" step="1" min="1" placeholder="100" inputmode="numeric"></label>
+        </div>
+        <div class="pack-info" id="pack-mat-info"></div>
+      </div>
+      <div class="pack-hint" id="pack-hint">Wird bei jedem Verkauf automatisch vom Gewinn abgezogen – kein Monats-Minus mehr. Beim Verkauf kannst du es per Häkchen überspringen.</div>
+      <button class="goal-save-btn" id="pack-save-btn"><i class="ti ti-check"></i> Speichern</button>
+    </div>
     <h2 class="section-title">Erscheinungsbild</h2>
     <div class="theme-toggle" id="theme-toggle">
       <button class="theme-btn" data-theme="light"><i class="ti ti-sun"></i>Hell</button>
@@ -802,6 +828,7 @@ label input::placeholder{color:var(--text-tertiary)}
       <label>Versand, den du trägst (€)<input type="number" name="shippingCost" step="0.01" min="0" inputmode="decimal" value="0"></label>
       <label>Verkauft am<input type="date" name="soldDate"></label>
       <label>Verkauft auf <span style="color:var(--text-tertiary);font-weight:400">(optional)</span><input type="text" name="soldPlatform" list="platforms-list" placeholder="z. B. Vinted, Kleinanzeigen"></label>
+      <label class="pack-skip-label" id="pack-skip-wrap" hidden><input type="checkbox" id="pack-skip"><span id="pack-skip-text">Andere Verpackung verwendet – keine Verpackungskosten</span></label>
       <div class="profit-preview" id="profit-preview">Gewinn wird hier angezeigt, sobald du den Verkaufspreis einträgst.</div>
       <div class="modal-actions">
         <button type="button" class="secondary" data-close-modal>Abbrechen</button>
@@ -866,6 +893,12 @@ label input::placeholder{color:var(--text-tertiary)}
   function saveState(){ try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }catch(e){} }
   function getGoal(){ return parseFloat(localStorage.getItem(GOAL_KEY))||0; }
   function setGoal(v){ localStorage.setItem(GOAL_KEY,v); }
+  const PACK_KEY='flippd_packaging';
+  const PACK_DEFAULT={mode:'off',flat:0,matName:'',matTotal:0,matQty:0,matRemaining:0};
+  function getPackaging(){ try{const c=JSON.parse(localStorage.getItem(PACK_KEY));if(c&&typeof c==='object')return Object.assign({},PACK_DEFAULT,c);}catch(e){} return Object.assign({},PACK_DEFAULT); }
+  function setPackaging(c){ try{localStorage.setItem(PACK_KEY,JSON.stringify(c));}catch(e){} }
+  function packagingActive(){ return getPackaging().mode!=='off'; }
+  function packagingPerSale(){ const c=getPackaging(); if(c.mode==='flat')return c.flat||0; if(c.mode==='material'&&c.matQty>0)return (c.matTotal||0)/c.matQty; return 0; }
 
   function getCurrentTheme(){ return localStorage.getItem(THEME_KEY)||'system'; }
   function applyTheme(theme){
@@ -905,6 +938,7 @@ label input::placeholder{color:var(--text-tertiary)}
     const item={id:uid(),name,purchasePrice:cleanNum(raw.purchasePrice),purchaseDate:cleanDate(raw.purchaseDate),supplier:cleanStr(raw.supplier).trim(),kategorie:cleanStr(raw.kategorie).trim(),status};
     if(status==='verkauft'){
       item.soldPrice=cleanNum(raw.soldPrice);item.shippingCost=cleanNum(raw.shippingCost);
+      item.packagingCost=cleanNum(raw.packagingCost);
       item.soldDate=cleanDate(raw.soldDate);item.soldPlatform=cleanStr(raw.soldPlatform).trim();
     }
     return item;
@@ -945,7 +979,7 @@ label input::placeholder{color:var(--text-tertiary)}
   }
   function itemProfit(item){
     if(item.status!=='verkauft') return 0;
-    return (item.soldPrice||0)-(item.purchasePrice||0)-(item.shippingCost||0);
+    return (item.soldPrice||0)-(item.purchasePrice||0)-(item.shippingCost||0)-(item.packagingCost||0);
   }
   function costsForMonth(ym){
     return state.costs.filter(c=>monthOf(c.date)===ym).reduce((s,c)=>s+(c.amount||0),0);
@@ -1540,6 +1574,25 @@ label input::placeholder{color:var(--text-tertiary)}
       ${avg!==null?`<div class="stat-row"><span>Ø Verkaufsdauer</span><strong>${avg} Tage</strong></div>`:''}`;
     updateThemeButtons();renderSteuerTracker();renderWegweiser();
     const g=getGoal(); if(g) document.getElementById('goal-input').value=g;
+    renderPackUI();
+  }
+  function renderPackUI(){
+    const c=getPackaging();
+    document.querySelectorAll('#pack-mode-toggle .theme-btn').forEach(b=>b.classList.toggle('active',b.dataset.pmode===c.mode));
+    const flatBox=document.getElementById('pack-flat-box'),matBox=document.getElementById('pack-material-box');
+    if(flatBox) flatBox.hidden=c.mode!=='flat';
+    if(matBox) matBox.hidden=c.mode!=='material';
+    if(c.flat) document.getElementById('pack-flat-input').value=c.flat;
+    if(c.matName) document.getElementById('pack-mat-name').value=c.matName;
+    if(c.matTotal) document.getElementById('pack-mat-total').value=c.matTotal;
+    if(c.matQty) document.getElementById('pack-mat-qty').value=c.matQty;
+    const info=document.getElementById('pack-mat-info');
+    if(info){
+      if(c.mode==='material'&&c.matQty>0){
+        const per=(c.matTotal||0)/c.matQty, rem=(c.matRemaining!=null?c.matRemaining:c.matQty);
+        info.innerHTML=`<strong>${eur(per)}</strong> pro Stück · noch <strong>${rem}</strong> von ${c.matQty} übrig`+(rem<=10?' ⚠️ bald leer':'');
+      } else info.innerHTML='';
+    }
   }
 
   // ── Pro / Paywall ──────────────────────────────────────────
@@ -1613,6 +1666,12 @@ label input::placeholder{color:var(--text-tertiary)}
     document.querySelectorAll('.price-btn').forEach(b=>b.classList.remove('selected'));
     const f=document.getElementById('form-sell');
     f.soldPrice.value='';f.shippingCost.value='0';f.soldDate.value=today();f.soldPlatform.value='';
+    const pack=packagingPerSale(),pw=document.getElementById('pack-skip-wrap'),pcb=document.getElementById('pack-skip');
+    if(pcb)pcb.checked=false;
+    if(pw){
+      pw.hidden=!(packagingActive()&&pack>0);
+      document.getElementById('pack-skip-text').textContent=`Andere Verpackung – keine ${eur(pack)} abziehen`;
+    }
     updateProfitPreview();openModal('modal-sell');setTimeout(()=>f.soldPrice.focus(),100);
   }
   function updateProfitPreview(){
@@ -1622,8 +1681,10 @@ label input::placeholder{color:var(--text-tertiary)}
     const f=document.getElementById('form-sell');
     const sp=parseFloat(f.soldPrice.value)||0,sh=parseFloat(f.shippingCost.value)||0;
     if(sp<=0){el.innerHTML='Gewinn wird hier angezeigt, sobald du den Verkaufspreis einträgst.';return;}
-    const profit=sp-item.purchasePrice-sh;
-    el.innerHTML=`Gewinn: <strong class="${profit>=0?'positive':'negative'}">${profit>=0?'+':''}${eur(profit)}</strong>`;
+    const skip=document.getElementById('pack-skip');
+    const pack=(skip&&skip.checked)?0:packagingPerSale();
+    const profit=sp-item.purchasePrice-sh-pack;
+    el.innerHTML=`Gewinn: <strong class="${profit>=0?'positive':'negative'}">${profit>=0?'+':''}${eur(profit)}</strong>`+(pack>0?`<div style="font-size:11px;color:var(--text-tertiary);margin-top:4px">abzgl. ${eur(pack)} Verpackung</div>`:'');
   }
 
   // Edit flow
@@ -1723,6 +1784,10 @@ label input::placeholder{color:var(--text-tertiary)}
     item.soldPrice=parseFloat(f.soldPrice.value)||0;item.shippingCost=parseFloat(f.shippingCost.value)||0;
     item.soldDate=f.soldDate.value||today();item.soldPlatform=(f.soldPlatform.value||'').trim();
     item.status='verkauft';
+    const skipPack=document.getElementById('pack-skip'),pcfg=getPackaging();
+    const pack=(skipPack&&skipPack.checked)?0:packagingPerSale();
+    item.packagingCost=pack;
+    if(pack>0&&pcfg.mode==='material'&&pcfg.matRemaining>0){ pcfg.matRemaining-=1; setPackaging(pcfg); }
     const profit=itemProfit(item);
     const before=(lastHeroProfit==null?0:lastHeroProfit);
     const celebrate=profit>0;
@@ -1732,6 +1797,7 @@ label input::placeholder{color:var(--text-tertiary)}
     if(celebrate){ celebrateSale(before,lastHeroProfit,profit); }
   });
   document.querySelectorAll('#form-sell input[name="soldPrice"],#form-sell input[name="shippingCost"]').forEach(inp=>inp.addEventListener('input',updateProfitPreview));
+  document.getElementById('pack-skip').addEventListener('change',updateProfitPreview);
 
   document.getElementById('status-toggle').addEventListener('click',e=>{const b=e.target.closest('.status-btn');if(b)setEditStatus(b.dataset.status);});
   document.getElementById('form-edit').addEventListener('submit',e=>{
@@ -1744,7 +1810,8 @@ label input::placeholder{color:var(--text-tertiary)}
       item.soldPrice=parseFloat(f.soldPrice.value)||0;item.shippingCost=parseFloat(f.shippingCost.value)||0;
       item.soldDate=f.soldDate.value||item.soldDate||today();item.status='verkauft';
       item.soldPlatform=(f.soldPlatform.value||'').trim();
-    }else{item.soldPrice=null;item.shippingCost=null;item.soldDate=null;item.soldPlatform=null;item.status='lager';}
+      item.packagingCost=(item.packagingCost!=null?item.packagingCost:packagingPerSale());
+    }else{item.soldPrice=null;item.shippingCost=null;item.soldDate=null;item.soldPlatform=null;item.packagingCost=null;item.status='lager';}
     rerender();closeModal('modal-edit');editingItemId=null;showToast('Änderungen gespeichert','ti-check');
   });
   document.getElementById('edit-delete-btn').addEventListener('click',()=>{
@@ -1848,6 +1915,27 @@ label input::placeholder{color:var(--text-tertiary)}
   document.getElementById('goal-save-btn').addEventListener('click',()=>{
     const val=parseFloat(document.getElementById('goal-input').value)||0;
     setGoal(val);rerender();showToast(val>0?`Ziel: ${eur(val)} gespeichert`:'Ziel entfernt','ti-target');
+  });
+  document.getElementById('pack-mode-toggle').addEventListener('click',e=>{
+    const b=e.target.closest('.theme-btn');if(!b)return;
+    document.querySelectorAll('#pack-mode-toggle .theme-btn').forEach(x=>x.classList.toggle('active',x===b));
+    document.getElementById('pack-flat-box').hidden=b.dataset.pmode!=='flat';
+    document.getElementById('pack-material-box').hidden=b.dataset.pmode!=='material';
+  });
+  document.getElementById('pack-save-btn').addEventListener('click',()=>{
+    const activeBtn=document.querySelector('#pack-mode-toggle .theme-btn.active');
+    const mode=activeBtn?activeBtn.dataset.pmode:'off';
+    const c=getPackaging();c.mode=mode;
+    if(mode==='flat'){ c.flat=parseFloat(document.getElementById('pack-flat-input').value)||0; }
+    if(mode==='material'){
+      c.matName=(document.getElementById('pack-mat-name').value||'').trim();
+      const total=parseFloat(document.getElementById('pack-mat-total').value)||0;
+      const qty=parseInt(document.getElementById('pack-mat-qty').value)||0;
+      if(c.matQty!==qty||c.matRemaining==null) c.matRemaining=qty; // Bestand bei neuer Menge zurücksetzen
+      c.matTotal=total;c.matQty=qty;
+    }
+    setPackaging(c);renderProfile();
+    showToast(mode==='off'?'Verpackungskosten aus':'Verpackungskosten gespeichert','ti-package');
   });
   document.getElementById('steuer-export-btn').addEventListener('click',exportElsterCSV);
   document.getElementById('export-btn').addEventListener('click',()=>{

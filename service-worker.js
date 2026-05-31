@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flippd-v1.4';
+const CACHE_NAME = 'flippd-v1.5';
 const ASSETS = [
   './',
   './index.html',
