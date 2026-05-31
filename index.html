@@ -552,14 +552,6 @@ label input::placeholder{color:var(--text-tertiary)}
     <div class="analyse-header">
       <span class="analyse-view-title" id="analyse-view-title">Gewinn-Analyse</span>
     </div>
-    <div class="chart-card">
-      <div class="chart-title">Gewinn der letzten 6 Monate</div>
-      <div class="chart-row-big" id="chart-row"></div>
-      <div class="chart-empty" id="chart-empty" hidden>
-        <i class="ti ti-chart-bar"></i>
-        <p>Dein Gewinn-Trend erscheint hier, sobald du Verkäufe über mehrere Monate eingetragen hast.</p>
-      </div>
-    </div>
     <div class="donut-card">
       <div class="donut-header">
         <div class="donut-title">Aufschlüsselung</div>
@@ -586,14 +578,14 @@ label input::placeholder{color:var(--text-tertiary)}
       </div>
     </div>
     <div class="top-card">
-      <div class="top-card-title">Top Verkäufe</div>
-      <div class="top-list" id="top-list"></div>
-      <div class="top-empty" id="top-empty" hidden>Hier siehst du deine besten Verkäufe.</div>
-    </div>
-    <div class="top-card">
       <div class="top-card-title">Beste Einkaufsquellen · ROI</div>
       <div class="top-list" id="source-list"></div>
       <div class="top-empty" id="source-empty" hidden>Trag bei deinen Artikeln eine Bezugsquelle ein — dann siehst du hier, welche Quellen am meisten Gewinn bringen.</div>
+    </div>
+    <div class="top-card">
+      <div class="top-card-title">Top Verkäufe</div>
+      <div class="top-list" id="top-list"></div>
+      <div class="top-empty" id="top-empty" hidden>Hier siehst du deine besten Verkäufe.</div>
     </div>
   </section>
 
@@ -1243,25 +1235,6 @@ label input::placeholder{color:var(--text-tertiary)}
 
   // Analyse Charts
   function renderAnalyseCharts(){
-    const yms=[]; for(let i=5;i>=0;i--) yms.push(monthsBack(i));
-    const profits=yms.map(ym=>statsForMonth(ym).profit);
-    const row=document.getElementById('chart-row'),chartEmpty=document.getElementById('chart-empty');
-    if(profits.filter(p=>p!==0).length<2){row.innerHTML='';row.hidden=true;chartEmpty.hidden=false;}
-    else{
-      row.hidden=false;chartEmpty.hidden=true;row.innerHTML='';
-      const maxP=Math.max(...profits.map(p=>Math.abs(p)),0.01);
-      const MAX_BIG=90;
-      yms.forEach((ym,idx)=>{
-        const p=profits[idx];
-        const hasData=Math.abs(p)>0.001;
-        const px=hasData?Math.max(Math.round((Math.abs(p)/maxP)*MAX_BIG),10):2;
-        const bar=document.createElement('div');
-        bar.className='bar-big'+(idx===yms.length-1?' active':'')+(p<0?' negative':'');
-        const fillStyle=hasData?`height:${px}px`:`height:2px;background:var(--border);border-radius:2px;min-height:0`;
-        bar.innerHTML=`<div class="bar-fill-big" style="${fillStyle}"></div><span class="bar-label-big">${monthLabel(ym)}</span>`;
-        row.appendChild(bar);
-      });
-    }
     renderDonut();renderTopItems();renderSourceAnalysis();
   }
   function openAnalyse(title){
