@@ -90,6 +90,15 @@ button,input{font-family:inherit;color:inherit}
 .hero::before{content:"";position:absolute;top:-30%;right:-15%;width:55%;height:140%;background:radial-gradient(circle,rgba(52,211,153,.18),transparent 70%);pointer-events:none}
 .hero-label{font-size:12px;color:var(--hero-subtle);font-weight:600;letter-spacing:.08em;text-transform:uppercase;position:relative}
 .hero-num{font-size:36px;color:var(--hero-number);font-weight:700;margin-top:3px;letter-spacing:-.02em;line-height:1.1;position:relative;text-shadow:0 0 32px rgba(52,211,153,.25)}
+.hero-num.pop{animation:hero-pop .7s cubic-bezier(.2,.7,.3,1)}
+@keyframes hero-pop{0%{transform:scale(1)}25%{transform:scale(1.14);text-shadow:0 0 48px rgba(52,211,153,.6)}100%{transform:scale(1)}}
+.confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.confetti{position:absolute;top:-24px;width:11px;height:11px;border-radius:2px;will-change:transform,opacity;animation:confetti-fall 1.7s cubic-bezier(.25,.6,.35,1) forwards}
+@keyframes confetti-fall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(108vh) rotate(680deg);opacity:0}}
+.gain-badge{position:fixed;top:42%;left:50%;z-index:10000;background:linear-gradient(160deg,#10B981,#059669);color:#fff;font-size:34px;font-weight:800;padding:16px 34px;border-radius:22px;box-shadow:0 18px 50px rgba(5,90,60,.5);pointer-events:none}
+.gain-badge.show{animation:gain-pop 1.5s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes gain-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}72%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-66%) scale(.96)}}
+@media (prefers-reduced-motion: reduce){.hero-num.pop{animation:none}.confetti,.gain-badge{display:none}}
 .hero-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px;flex-wrap:wrap;position:relative}
 .trend{font-size:12px;padding:5px 11px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:5px}
 .trend.up{background:var(--hero-trend-bg);color:var(--hero-trend-text)}
@@ -1410,11 +1419,53 @@ label input::placeholder{color:var(--text-tertiary)}
   }
 
   // Dashboard
+  // --- Belohnungs-Animationen ---
+  let lastHeroProfit=null;
+  function reducedMotion(){return window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;}
+  function animateCount(el,from,to,dur){
+    if(reducedMotion()||from===to){el.textContent=eur(to);return;}
+    const t0=performance.now();
+    function step(now){
+      const p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);
+      el.textContent=eur(from+(to-from)*e);
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function confettiBurst(){
+    if(reducedMotion())return;
+    const layer=document.createElement('div');layer.className='confetti-layer';
+    const colors=['#34D399','#10B981','#6EE7B7','#A7F3D0','#059669'];
+    for(let i=0;i<42;i++){
+      const c=document.createElement('div');c.className='confetti';
+      c.style.left=Math.random()*100+'vw';c.style.background=colors[i%colors.length];
+      c.style.animationDelay=(Math.random()*0.25)+'s';
+      c.style.transform='scale('+(0.6+Math.random()*0.9)+')';
+      layer.appendChild(c);
+    }
+    document.body.appendChild(layer);setTimeout(()=>layer.remove(),2000);
+  }
+  function celebrateSale(from,to,profit){
+    switchView('dashboard');
+    requestAnimationFrame(()=>{
+      confettiBurst();
+      const heroEl=document.getElementById('hero-profit');
+      if(heroEl){heroEl.classList.remove('pop');void heroEl.offsetWidth;heroEl.classList.add('pop');animateCount(heroEl,from,to,1000);}
+      const badge=document.createElement('div');badge.className='gain-badge show';badge.textContent='+'+eur(profit)+' 🎉';
+      document.body.appendChild(badge);setTimeout(()=>badge.remove(),1500);
+    });
+  }
+
   function renderDashboard(){
     const cm=currentMonth(),pm=monthsBack(1);
     const m=statsForMonth(cm),prev=statsForMonth(pm),total=statsTotal(),lager=lagerStats();
     document.querySelector('.dash-month').textContent=monthLabelFull(cm);
-    document.getElementById('hero-profit').textContent=eur(m.profit);
+    const heroEl=document.getElementById('hero-profit');
+    if(lastHeroProfit!==null&&m.profit>lastHeroProfit+0.001){
+      heroEl.classList.remove('pop');void heroEl.offsetWidth;heroEl.classList.add('pop');
+      animateCount(heroEl,lastHeroProfit,m.profit,900);
+    }else{heroEl.textContent=eur(m.profit);}
+    lastHeroProfit=m.profit;
     document.getElementById('hero-total').textContent=`Gesamt ${eur(total.profit)}`;
     const trendEl=document.getElementById('hero-trend');
     if(prev.profit!==0){
@@ -1700,8 +1751,12 @@ label input::placeholder{color:var(--text-tertiary)}
     item.soldDate=f.soldDate.value||today();item.soldPlatform=(f.soldPlatform.value||'').trim();
     item.status='verkauft';
     const profit=itemProfit(item);
+    const before=(lastHeroProfit==null?0:lastHeroProfit);
+    const celebrate=profit>0;
+    if(celebrate){ lastHeroProfit=statsForMonth(currentMonth()).profit; } // verhindert doppelte Animation
     rerender();closeModal('modal-sell');sellingItemId=null;
     showToast(profit>=0?`+${eur(profit)} verdient!`:`${eur(profit)} (Verlust)`,profit>=0?'ti-trending-up':'ti-trending-down');
+    if(celebrate){ celebrateSale(before,lastHeroProfit,profit); }
   });
   document.querySelectorAll('#form-sell input[name="soldPrice"],#form-sell input[name="shippingCost"]').forEach(inp=>inp.addEventListener('input',updateProfitPreview));
 
