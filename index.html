@@ -293,7 +293,13 @@ button,input{font-family:inherit;color:inherit}
 .profile-actions button:active{background:var(--bg)}
 .profile-actions .danger{color:var(--negative)}
 /* Wegweiser */
-.wegweiser-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:6px;transition:background-color .25s,border-color .25s}
+.wegweiser-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:6px;transition:background-color .25s,border-color .25s}
+.wegweiser-head{display:flex;align-items:center;gap:10px;width:100%;background:transparent;border:0;padding:0;cursor:pointer;text-align:left}
+.wegweiser-head .wegweiser-badge{margin:0}
+.wegweiser-status{font-size:13px;color:var(--text-secondary);font-weight:500}
+.wegweiser-chevron{margin-left:auto;font-size:20px;color:var(--text-tertiary);transition:transform .2s}
+.wegweiser-chevron.open{transform:rotate(90deg)}
+.wegweiser-body{margin-top:14px}
 .wegweiser-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;margin-bottom:12px}
 .wegweiser-badge.safe{background:var(--positive-bg);color:var(--positive)}
 .wegweiser-badge.prepare{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-border)}
@@ -1336,6 +1342,7 @@ label input::placeholder{color:var(--text-tertiary)}
     renderProfile();
   }
 
+  let wegweiserOpen=false;
   function renderWegweiser(){
     const revenue=currentYearRevenue(),pct=(revenue/STEUER_LIMIT)*100;
     const done=getStepsDone();
@@ -1372,11 +1379,18 @@ label input::placeholder{color:var(--text-tertiary)}
       </div>`;
     }).join('');
 
+    const doneCount=done.length,total=WEGWEISER_STEPS.length;
     document.getElementById('wegweiser-card').innerHTML=`
-      <span class="wegweiser-badge ${badgeClass}">${badgeText}</span>
-      <p class="wegweiser-intro">${intro}</p>
-      <div class="step-list">${stepsHtml}</div>
-      <div class="wegweiser-disclaimer"><strong>Hinweis:</strong> Dies ist eine vereinfachte Orientierungshilfe, kein Rechtsrat. Für rechtssichere Beratung bitte einen Steuerberater hinzuziehen. Als Minderjähriger benötigst du immer die Unterstützung eines Erziehungsberechtigten.</div>`;
+      <button class="wegweiser-head" id="wegweiser-toggle" aria-expanded="${wegweiserOpen}">
+        <span class="wegweiser-badge ${badgeClass}">${badgeText}</span>
+        <span class="wegweiser-status">${doneCount}/${total} erledigt</span>
+        <i class="ti ti-chevron-right wegweiser-chevron${wegweiserOpen?' open':''}"></i>
+      </button>
+      <div class="wegweiser-body"${wegweiserOpen?'':' hidden'}>
+        <p class="wegweiser-intro">${intro}</p>
+        <div class="step-list">${stepsHtml}</div>
+        <div class="wegweiser-disclaimer"><strong>Hinweis:</strong> Dies ist eine vereinfachte Orientierungshilfe, kein Rechtsrat. Für rechtssichere Beratung bitte einen Steuerberater hinzuziehen. Als Minderjähriger benötigst du immer die Unterstützung eines Erziehungsberechtigten.</div>
+      </div>`;
   }
 
   // Zuletzt verkauft
@@ -1956,6 +1970,15 @@ label input::placeholder{color:var(--text-tertiary)}
     document.querySelectorAll('.donut-tab').forEach(t=>t.classList.toggle('active',t===b));renderDonut();
   });
   document.getElementById('wegweiser-card').addEventListener('click',e=>{
+    const head=e.target.closest('.wegweiser-head');
+    if(head){
+      wegweiserOpen=!wegweiserOpen;
+      const body=document.querySelector('.wegweiser-body'),chev=document.querySelector('.wegweiser-chevron');
+      if(body)body.hidden=!wegweiserOpen;
+      if(chev)chev.classList.toggle('open',wegweiserOpen);
+      head.setAttribute('aria-expanded',wegweiserOpen);
+      return;
+    }
     const b=e.target.closest('.step-check-btn');if(!b)return;
     toggleStep(b.dataset.step);
   });
