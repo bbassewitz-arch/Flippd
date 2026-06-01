@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flippd-v1.8';
+const CACHE_NAME = 'flippd-v1.9';
 const ASSETS = [
   './',
   './index.html',
@@ -6,7 +6,8 @@ const ASSETS = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './assets/icons.css',
-  './assets/fonts/tabler-icons.woff2'
+  './assets/fonts/tabler-icons.woff2',
+  './assets/fonts/inter-latin.woff2'
 ];
 
 // Install: cache alle Assets
