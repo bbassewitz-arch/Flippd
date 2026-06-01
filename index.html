@@ -79,7 +79,14 @@ button,input{font-family:inherit;color:inherit}
 @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
 .top-row{display:flex;align-items:center;justify-content:space-between;padding:8px 4px 10px}
-.month-pill{background:var(--card);border:1px solid var(--border);padding:8px 14px;border-radius:999px;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:4px;transition:background-color .25s,border-color .25s}
+.month-pill{background:var(--card);border:1px solid var(--border);padding:8px 14px;border-radius:999px;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:4px;transition:background-color .25s,border-color .25s;min-width:96px;justify-content:center}
+.month-nav{display:flex;align-items:center;gap:3px}
+.month-arrow{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border:0;background:transparent;color:var(--text-secondary);cursor:pointer;border-radius:9px;transition:background-color .15s,opacity .15s}
+.month-arrow i{font-size:18px;display:block;line-height:1}
+.month-arrow:active{background:var(--border)}
+.month-arrow:disabled{opacity:.22;cursor:default}
+.month-today{margin-left:5px;border:1px solid var(--border);background:var(--card);color:var(--brand);font-size:12px;font-weight:600;padding:6px 11px;border-radius:999px;cursor:pointer;transition:background-color .15s}
+.month-today:active{background:var(--brand-tint)}
 .avatar{width:38px;height:38px;border-radius:50%;background:var(--brand-tint-strong);color:var(--brand-text);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px}
 [data-view] h1{font-size:24px;margin:6px 4px 14px;font-weight:600;letter-spacing:-.01em;color:var(--text)}
 .section-title{font-size:13px;font-weight:600;color:var(--text-secondary);margin:18px 4px 10px;text-transform:uppercase;letter-spacing:.04em}
@@ -474,7 +481,12 @@ label input::placeholder{color:var(--text-tertiary)}
   <!-- Dashboard -->
   <section data-view="dashboard">
     <div class="top-row">
-      <span class="month-pill"><span class="dash-month">Mai 2026</span></span>
+      <div class="month-nav">
+        <button class="month-arrow" id="month-prev" aria-label="Vorheriger Monat"><i class="ti ti-chevron-right" style="transform:rotate(180deg)"></i></button>
+        <span class="month-pill"><span class="dash-month">Mai 2026</span></span>
+        <button class="month-arrow" id="month-next" aria-label="Nächster Monat"><i class="ti ti-chevron-right"></i></button>
+        <button class="month-today" id="month-today" hidden>Heute</button>
+      </div>
       <div class="avatar">B</div>
     </div>
     <div class="welcome" id="welcome" hidden>
@@ -482,7 +494,7 @@ label input::placeholder{color:var(--text-tertiary)}
       <p><strong>Willkommen bei Flippd.</strong> Tippe auf das grüne Plus, um deinen ersten Artikel einzutragen.</p>
     </div>
     <div class="hero" id="hero-card">
-      <div class="hero-label">Gewinn diesen Monat</div>
+      <div class="hero-label" id="hero-label">Gewinn diesen Monat</div>
       <div class="hero-num" id="hero-profit">0,00 €</div>
       <div class="hero-bottom">
         <span class="trend neutral" id="hero-trend">noch keine Verkäufe</span>
@@ -933,6 +945,10 @@ label input::placeholder{color:var(--text-tertiary)}
   const monthOf=d=>d?d.slice(0,7):null;
   const currentMonth=()=>today().slice(0,7);
   const monthsBack=n=>{ const d=new Date(); d.setDate(1); d.setMonth(d.getMonth()-n); return d.toISOString().slice(0,7); };
+  const monthShift=(ym,delta)=>{ const[y,m]=ym.split('-').map(Number); const idx=y*12+(m-1)+delta; return Math.floor(idx/12)+'-'+String(idx%12+1).padStart(2,'0'); };
+  let viewMonth=null; // null = aktueller Monat
+  let suppressHeroAnim=false;
+  function activeMonth(){ return viewMonth||currentMonth(); }
   const MONTH_SHORT=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
   const MONTH_FULL=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
   const monthLabel=ym=>MONTH_SHORT[parseInt(ym.split('-')[1])-1];
@@ -1477,15 +1493,18 @@ label input::placeholder{color:var(--text-tertiary)}
   }
 
   function renderDashboard(){
-    const cm=currentMonth(),pm=monthsBack(1);
+    const cm=activeMonth(),pm=monthShift(cm,-1),isCur=cm===currentMonth();
     const m=statsForMonth(cm),prev=statsForMonth(pm),total=statsTotal(),lager=lagerStats();
     document.querySelector('.dash-month').textContent=monthLabelFull(cm);
+    document.getElementById('hero-label').textContent=isCur?'Gewinn diesen Monat':'Gewinn im '+monthLabelFull(cm);
+    const mn=document.getElementById('month-next'),mt=document.getElementById('month-today');
+    if(mn)mn.disabled=isCur; if(mt)mt.hidden=isCur;
     const heroEl=document.getElementById('hero-profit');
-    if(lastHeroProfit!==null&&m.profit>lastHeroProfit+0.001){
+    if(!suppressHeroAnim&&lastHeroProfit!==null&&m.profit>lastHeroProfit+0.001){
       heroEl.classList.remove('pop');void heroEl.offsetWidth;heroEl.classList.add('pop');
       animateCount(heroEl,lastHeroProfit,m.profit,900);
     }else{heroEl.textContent=eur(m.profit);}
-    lastHeroProfit=m.profit;
+    lastHeroProfit=m.profit;suppressHeroAnim=false;
     document.getElementById('hero-total').textContent=`Gesamt ${eur(total.profit)}`;
     const trendEl=document.getElementById('hero-trend');
     if(prev.profit!==0){
@@ -1503,6 +1522,7 @@ label input::placeholder{color:var(--text-tertiary)}
     document.getElementById('tile-lager-count').textContent=`${lager.count} Artikel`;
     document.getElementById('welcome').hidden=state.items.length>0||state.costs.length>0;
     renderGoal();
+    if(!isCur) document.getElementById('goal-card').hidden=true;
     renderDac7();
     renderDashChart();
   }
@@ -1658,6 +1678,7 @@ label input::placeholder{color:var(--text-tertiary)}
   // Views
   function switchView(name,opts){
     opts=opts||{};
+    if(name==='dashboard'&&viewMonth!==null){viewMonth=null;suppressHeroAnim=true;renderDashboard();}
     document.querySelectorAll('[data-view]').forEach(v=>v.hidden=v.dataset.view!==name);
     document.querySelectorAll('.bottom-nav .nav-item').forEach(n=>n.classList.toggle('active',n.dataset.nav===name));
     if(name==='items'&&opts.filter){
@@ -1802,6 +1823,7 @@ label input::placeholder{color:var(--text-tertiary)}
   document.getElementById('form-sell').addEventListener('submit',e=>{
     e.preventDefault();const f=e.target;
     const item=state.items.find(i=>i.id===sellingItemId);if(!item)return;
+    const cmBefore=statsForMonth(currentMonth()).profit; // aktueller Monat VOR dem Verkauf
     item.soldPrice=parseFloat(f.soldPrice.value)||0;item.shippingCost=parseFloat(f.shippingCost.value)||0;
     item.soldDate=f.soldDate.value||today();item.soldPlatform=(f.soldPlatform.value||'').trim();
     item.status='verkauft';
@@ -1810,12 +1832,13 @@ label input::placeholder{color:var(--text-tertiary)}
     item.packagingCost=pack;
     if(pack>0&&pcfg.mode==='material'&&pcfg.matRemaining>0){ pcfg.matRemaining-=1; setPackaging(pcfg); }
     const profit=itemProfit(item);
-    const before=(lastHeroProfit==null?0:lastHeroProfit);
     const celebrate=profit>0;
-    if(celebrate){ lastHeroProfit=statsForMonth(currentMonth()).profit; } // verhindert doppelte Animation
+    viewMonth=null; // immer zum aktuellen Monat zurück
+    const cmAfter=statsForMonth(currentMonth()).profit;
+    if(celebrate){ lastHeroProfit=cmAfter; } // verhindert doppelte Animation beim Rerender
     rerender();closeModal('modal-sell');sellingItemId=null;
     showToast(profit>=0?`+${eur(profit)} verdient!`:`${eur(profit)} (Verlust)`,profit>=0?'ti-trending-up':'ti-trending-down');
-    if(celebrate){ celebrateSale(before,lastHeroProfit,profit); }
+    if(celebrate){ celebrateSale(cmBefore,cmAfter,profit); }
   });
   document.querySelectorAll('#form-sell input[name="soldPrice"],#form-sell input[name="shippingCost"]').forEach(inp=>inp.addEventListener('input',updateProfitPreview));
   document.getElementById('pack-skip').addEventListener('change',updateProfitPreview);
@@ -1933,6 +1956,15 @@ label input::placeholder{color:var(--text-tertiary)}
     toggleStep(b.dataset.step);
   });
   document.getElementById('theme-toggle').addEventListener('click',e=>{const b=e.target.closest('.theme-btn');if(b)applyTheme(b.dataset.theme);});
+  function goMonth(delta){
+    let nm=monthShift(activeMonth(),delta);const cur=currentMonth();
+    if(nm>cur)nm=cur;
+    viewMonth=(nm===cur)?null:nm;
+    suppressHeroAnim=true;renderDashboard();
+  }
+  document.getElementById('month-prev').addEventListener('click',()=>goMonth(-1));
+  document.getElementById('month-next').addEventListener('click',()=>goMonth(1));
+  document.getElementById('month-today').addEventListener('click',()=>{viewMonth=null;suppressHeroAnim=true;renderDashboard();});
   document.getElementById('goal-save-btn').addEventListener('click',()=>{
     const val=parseFloat(document.getElementById('goal-input').value)||0;
     setGoal(val);rerender();showToast(val>0?`Ziel: ${eur(val)} gespeichert`:'Ziel entfernt','ti-target');
