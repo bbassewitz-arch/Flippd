@@ -93,7 +93,14 @@ button,input{font-family:inherit;color:inherit}
 .month-today:active{background:var(--brand-tint)}
 .avatar{width:38px;height:38px;border-radius:50%;background:var(--brand-tint-strong);color:var(--brand-text);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px}
 [data-view] h1{font-size:25px;margin:6px 4px 14px;font-weight:700;letter-spacing:-.025em;color:var(--text)}
-.section-title{font-size:13px;font-weight:600;color:var(--text-secondary);margin:15px 4px 8px;text-transform:uppercase;letter-spacing:.04em}
+.section-title{font-size:13px;font-weight:600;color:var(--text-secondary);margin:14px 4px 7px;text-transform:uppercase;letter-spacing:.04em}
+.acc-row{display:flex;align-items:center;gap:10px;width:100%;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:15px 16px;cursor:pointer;font-size:14px;font-weight:600;color:var(--text);text-align:left;margin-top:8px;transition:background-color .15s}
+.acc-row:active{background:var(--bg)}
+.acc-label{flex:1}
+.acc-value{color:var(--text-tertiary);font-size:13px;font-weight:500;white-space:nowrap}
+.acc-chevron{font-size:20px;color:var(--text-tertiary);transition:transform .2s}
+.acc-chevron.open{transform:rotate(90deg)}
+.acc-body{margin-top:8px}
 
 /* Hero */
 .hero{background:var(--hero-bg);border-radius:26px;padding:24px 24px 22px;margin-bottom:14px;color:var(--hero-text);position:relative;overflow:hidden;box-shadow:var(--shadow-elev);cursor:pointer;transition:transform .15s}
@@ -252,10 +259,10 @@ button,input{font-family:inherit;color:inherit}
 .empty p{font-size:14px;margin:14px 0 0;line-height:1.5}
 
 /* Profil */
-#profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.stat-cell{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px}
-.stat-cell span{display:block;font-size:11px;color:var(--text-secondary);font-weight:500;margin-bottom:3px}
-.stat-cell strong{display:block;font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.01em;line-height:1.15}
+#profile-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:8px}
+.stat-cell{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 11px}
+.stat-cell span{display:block;font-size:10.5px;color:var(--text-secondary);font-weight:500;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat-cell strong{display:block;font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.02em;line-height:1.1}
 .stat-cell strong.neg{color:var(--negative)}
 .theme-toggle{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:6px}
 .theme-btn{background:transparent;border:0;padding:11px 8px;font-size:13px;font-weight:500;color:var(--text-secondary);border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:background-color .15s,color .15s}
@@ -664,14 +671,17 @@ label input::placeholder{color:var(--text-tertiary)}
     </div>
     <h2 class="section-title">Wegweiser: Kleinunternehmergrenze</h2>
     <div class="wegweiser-card" id="wegweiser-card"></div>
-    <h2 class="section-title">Monatsziel</h2>
-    <div class="goal-setting">
-      <label>Gewinn-Ziel diesen Monat (€)
-        <input type="number" id="goal-input" step="1" min="0" placeholder="z. B. 80" inputmode="numeric">
-      </label>
-      <button class="goal-save-btn" id="goal-save-btn"><i class="ti ti-check"></i> Ziel speichern</button>
+    <button class="acc-row" data-acc="goal"><span class="acc-label">Monatsziel</span><span class="acc-value" id="goal-acc-val"></span><i class="ti ti-chevron-right acc-chevron"></i></button>
+    <div class="acc-body" id="acc-goal" hidden>
+      <div class="goal-setting">
+        <label>Gewinn-Ziel diesen Monat (€)
+          <input type="number" id="goal-input" step="1" min="0" placeholder="z. B. 80" inputmode="numeric">
+        </label>
+        <button class="goal-save-btn" id="goal-save-btn"><i class="ti ti-check"></i> Ziel speichern</button>
+      </div>
     </div>
-    <h2 class="section-title">Verpackung pro Verkauf</h2>
+    <button class="acc-row" data-acc="pack"><span class="acc-label">Verpackung pro Verkauf</span><span class="acc-value" id="pack-acc-val"></span><i class="ti ti-chevron-right acc-chevron"></i></button>
+    <div class="acc-body" id="acc-pack" hidden>
     <div class="goal-setting">
       <div class="theme-toggle" id="pack-mode-toggle">
         <button class="theme-btn" data-pmode="off"><i class="ti ti-x"></i>Aus</button>
@@ -692,13 +702,17 @@ label input::placeholder{color:var(--text-tertiary)}
       <div class="pack-hint" id="pack-hint">Wird bei jedem Verkauf automatisch vom Gewinn abgezogen – kein Monats-Minus mehr. Beim Verkauf kannst du es per Häkchen überspringen.</div>
       <button class="goal-save-btn" id="pack-save-btn"><i class="ti ti-check"></i> Speichern</button>
     </div>
-    <h2 class="section-title">Erscheinungsbild</h2>
+    </div>
+    <button class="acc-row" data-acc="theme"><span class="acc-label">Erscheinungsbild</span><span class="acc-value" id="theme-acc-val"></span><i class="ti ti-chevron-right acc-chevron"></i></button>
+    <div class="acc-body" id="acc-theme" hidden>
     <div class="theme-toggle" id="theme-toggle">
       <button class="theme-btn" data-theme="light"><i class="ti ti-sun"></i>Hell</button>
       <button class="theme-btn" data-theme="system"><i class="ti ti-device-mobile"></i>System</button>
       <button class="theme-btn" data-theme="dark"><i class="ti ti-moon"></i>Dunkel</button>
     </div>
-    <h2 class="section-title">App installieren</h2>
+    </div>
+    <button class="acc-row" data-acc="install"><span class="acc-label">App installieren</span><i class="ti ti-chevron-right acc-chevron"></i></button>
+    <div class="acc-body" id="acc-install" hidden>
     <div class="install-card">
       <div class="install-top">
         <div class="install-icon"><i class="ti ti-device-mobile"></i></div>
@@ -713,7 +727,9 @@ label input::placeholder{color:var(--text-tertiary)}
         <strong>Android:</strong> Chrome → Menü ⋮ → „Zum Startbildschirm hinzufügen"
       </div>
     </div>
-    <h2 class="section-title">Daten</h2>
+    </div>
+    <button class="acc-row" data-acc="daten"><span class="acc-label">Daten exportieren & verwalten</span><i class="ti ti-chevron-right acc-chevron"></i></button>
+    <div class="acc-body" id="acc-daten" hidden>
     <div class="profile-actions">
       <button id="export-btn"><i class="ti ti-download"></i> Exportieren (JSON)</button>
       <button id="import-btn"><i class="ti ti-upload"></i> Importieren (JSON)</button>
@@ -721,6 +737,7 @@ label input::placeholder{color:var(--text-tertiary)}
       <button id="clear-btn" class="danger"><i class="ti ti-trash"></i> Alle Daten löschen</button>
     </div>
     <input type="file" id="import-input" accept=".json" style="display:none">
+    </div>
     <div class="profile-info">Flippd v1.1 · Alle Daten werden lokal in diesem Browser gespeichert.<br><br>Die Steuer-Hinweise in dieser App sind vereinfachte Orientierungshilfen und kein Rechtsrat. Für verbindliche Auskunft immer einen Steuerberater hinzuziehen.</div>
   </section>
 
@@ -1617,15 +1634,20 @@ label input::placeholder{color:var(--text-tertiary)}
   function renderProfile(){
     const total=statsTotal(),lager=lagerStats(),totalCosts=costsTotal(),avg=avgSellDays();
     document.getElementById('profile-stats').innerHTML=`
-      <div class="stat-cell"><span>Nettogewinn gesamt</span><strong>${eur(total.profit)}</strong></div>
-      <div class="stat-cell"><span>Umsatz gesamt</span><strong>${eur(total.revenue)}</strong></div>
+      <div class="stat-cell"><span>Gewinn</span><strong>${eurShort(total.profit)}</strong></div>
+      <div class="stat-cell"><span>Umsatz</span><strong>${eurShort(total.revenue)}</strong></div>
       <div class="stat-cell"><span>Verkäufe</span><strong>${total.count}</strong></div>
-      <div class="stat-cell"><span>Zusatzkosten</span><strong class="${totalCosts>0?'neg':''}">${totalCosts>0?'−':''}${eur(totalCosts)}</strong></div>
+      <div class="stat-cell"><span>Kosten</span><strong class="${totalCosts>0?'neg':''}">${totalCosts>0?'−':''}${eurShort(totalCosts)}</strong></div>
       <div class="stat-cell"><span>Im Lager</span><strong>${lager.count} · ${eurShort(lager.value)}</strong></div>
-      ${avg!==null?`<div class="stat-cell"><span>Ø Verkaufsdauer</span><strong>${avg} Tage</strong></div>`:''}`;
+      <div class="stat-cell"><span>Ø Dauer</span><strong>${avg!==null?avg+' T':'–'}</strong></div>`;
     updateThemeButtons();renderSteuerTracker();renderWegweiser();
     const g=getGoal(); if(g) document.getElementById('goal-input').value=g;
     renderPackUI();
+    document.getElementById('goal-acc-val').textContent=g?eurShort(g):'Aus';
+    const pc=getPackaging();
+    document.getElementById('pack-acc-val').textContent=pc.mode==='off'?'Aus':(pc.mode==='flat'?eur(pc.flat||0):(pc.matQty>0?eur((pc.matTotal||0)/pc.matQty)+'/St.':'Material'));
+    const th=localStorage.getItem('flippd_theme');
+    document.getElementById('theme-acc-val').textContent=th==='light'?'Hell':(th==='dark'?'Dunkel':'System');
   }
   function renderPackUI(){
     const c=getPackaging();
@@ -1982,7 +2004,12 @@ label input::placeholder{color:var(--text-tertiary)}
     const b=e.target.closest('.step-check-btn');if(!b)return;
     toggleStep(b.dataset.step);
   });
-  document.getElementById('theme-toggle').addEventListener('click',e=>{const b=e.target.closest('.theme-btn');if(b)applyTheme(b.dataset.theme);});
+  document.getElementById('theme-toggle').addEventListener('click',e=>{const b=e.target.closest('.theme-btn');if(b){applyTheme(b.dataset.theme);const v=document.getElementById('theme-acc-val');if(v)v.textContent=b.dataset.theme==='light'?'Hell':(b.dataset.theme==='dark'?'Dunkel':'System');}});
+  document.querySelectorAll('.acc-row').forEach(row=>row.addEventListener('click',()=>{
+    const body=document.getElementById('acc-'+row.dataset.acc);if(!body)return;
+    body.hidden=!body.hidden;
+    row.querySelector('.acc-chevron').classList.toggle('open',!body.hidden);
+  }));
   function goMonth(delta){
     let nm=monthShift(activeMonth(),delta);const cur=currentMonth();
     if(nm>cur)nm=cur;
