@@ -93,7 +93,7 @@ button,input{font-family:inherit;color:inherit}
 .month-today:active{background:var(--brand-tint)}
 .avatar{width:38px;height:38px;border-radius:50%;background:var(--brand-tint-strong);color:var(--brand-text);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px}
 [data-view] h1{font-size:25px;margin:6px 4px 14px;font-weight:700;letter-spacing:-.025em;color:var(--text)}
-.section-title{font-size:13px;font-weight:600;color:var(--text-secondary);margin:18px 4px 10px;text-transform:uppercase;letter-spacing:.04em}
+.section-title{font-size:13px;font-weight:600;color:var(--text-secondary);margin:15px 4px 8px;text-transform:uppercase;letter-spacing:.04em}
 
 /* Hero */
 .hero{background:var(--hero-bg);border-radius:26px;padding:24px 24px 22px;margin-bottom:14px;color:var(--hero-text);position:relative;overflow:hidden;box-shadow:var(--shadow-elev);cursor:pointer;transition:transform .15s}
@@ -252,11 +252,11 @@ button,input{font-family:inherit;color:inherit}
 .empty p{font-size:14px;margin:14px 0 0;line-height:1.5}
 
 /* Profil */
-#profile-stats{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:6px}
-.stat-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);font-size:14px}
-.stat-row:last-child{border-bottom:0}
-.stat-row span{color:var(--text-secondary)}
-.stat-row strong{font-weight:600;color:var(--text)}
+#profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.stat-cell{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px}
+.stat-cell span{display:block;font-size:11px;color:var(--text-secondary);font-weight:500;margin-bottom:3px}
+.stat-cell strong{display:block;font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.01em;line-height:1.15}
+.stat-cell strong.neg{color:var(--negative)}
 .theme-toggle{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:6px}
 .theme-btn{background:transparent;border:0;padding:11px 8px;font-size:13px;font-weight:500;color:var(--text-secondary);border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:background-color .15s,color .15s}
 .theme-btn i{font-size:16px}
@@ -1617,12 +1617,12 @@ label input::placeholder{color:var(--text-tertiary)}
   function renderProfile(){
     const total=statsTotal(),lager=lagerStats(),totalCosts=costsTotal(),avg=avgSellDays();
     document.getElementById('profile-stats').innerHTML=`
-      <div class="stat-row"><span>Verkäufe gesamt</span><strong>${total.count}</strong></div>
-      <div class="stat-row"><span>Umsatz gesamt</span><strong>${eur(total.revenue)}</strong></div>
-      <div class="stat-row"><span>Zusatzkosten gesamt</span><strong style="color:var(--negative)">−${eur(totalCosts)}</strong></div>
-      <div class="stat-row"><span>Nettogewinn gesamt</span><strong>${eur(total.profit)}</strong></div>
-      <div class="stat-row"><span>Im Lager</span><strong>${lager.count} Artikel · ${eur(lager.value)}</strong></div>
-      ${avg!==null?`<div class="stat-row"><span>Ø Verkaufsdauer</span><strong>${avg} Tage</strong></div>`:''}`;
+      <div class="stat-cell"><span>Nettogewinn gesamt</span><strong>${eur(total.profit)}</strong></div>
+      <div class="stat-cell"><span>Umsatz gesamt</span><strong>${eur(total.revenue)}</strong></div>
+      <div class="stat-cell"><span>Verkäufe</span><strong>${total.count}</strong></div>
+      <div class="stat-cell"><span>Zusatzkosten</span><strong class="${totalCosts>0?'neg':''}">${totalCosts>0?'−':''}${eur(totalCosts)}</strong></div>
+      <div class="stat-cell"><span>Im Lager</span><strong>${lager.count} · ${eurShort(lager.value)}</strong></div>
+      ${avg!==null?`<div class="stat-cell"><span>Ø Verkaufsdauer</span><strong>${avg} Tage</strong></div>`:''}`;
     updateThemeButtons();renderSteuerTracker();renderWegweiser();
     const g=getGoal(); if(g) document.getElementById('goal-input').value=g;
     renderPackUI();
